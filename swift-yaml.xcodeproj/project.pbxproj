@@ -1,0 +1,451 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		FDB2DB6B1B565D2B009B8287 /* SwiftYAML.h in Headers */ = {isa = PBXBuildFile; fileRef = FDB2DB6A1B565D2B009B8287 /* SwiftYAML.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		FDB2DB721B565D2B009B8287 /* SwiftYAML.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FDB2DB671B565D2B009B8287 /* SwiftYAML.framework */; };
+		FDB2DB771B565D2B009B8287 /* swift_yamlTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDB2DB761B565D2B009B8287 /* swift_yamlTests.swift */; };
+		FDB2DB821B565FD3009B8287 /* YAML.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDB2DB811B565FD3009B8287 /* YAML.swift */; };
+		FDB2DB8F1B5666BC009B8287 /* api.c in Sources */ = {isa = PBXBuildFile; fileRef = FDB2DB851B5666BC009B8287 /* api.c */; };
+		FDB2DB901B5666BC009B8287 /* dumper.c in Sources */ = {isa = PBXBuildFile; fileRef = FDB2DB861B5666BC009B8287 /* dumper.c */; };
+		FDB2DB911B5666BC009B8287 /* emitter.c in Sources */ = {isa = PBXBuildFile; fileRef = FDB2DB871B5666BC009B8287 /* emitter.c */; };
+		FDB2DB921B5666BC009B8287 /* loader.c in Sources */ = {isa = PBXBuildFile; fileRef = FDB2DB881B5666BC009B8287 /* loader.c */; };
+		FDB2DB931B5666BC009B8287 /* parser.c in Sources */ = {isa = PBXBuildFile; fileRef = FDB2DB891B5666BC009B8287 /* parser.c */; };
+		FDB2DB941B5666BC009B8287 /* reader.c in Sources */ = {isa = PBXBuildFile; fileRef = FDB2DB8A1B5666BC009B8287 /* reader.c */; };
+		FDB2DB951B5666BC009B8287 /* scanner.c in Sources */ = {isa = PBXBuildFile; fileRef = FDB2DB8B1B5666BC009B8287 /* scanner.c */; };
+		FDB2DB961B5666BC009B8287 /* writer.c in Sources */ = {isa = PBXBuildFile; fileRef = FDB2DB8C1B5666BC009B8287 /* writer.c */; };
+		FDB2DB971B5666BC009B8287 /* yaml.h in Headers */ = {isa = PBXBuildFile; fileRef = FDB2DB8D1B5666BC009B8287 /* yaml.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		FDB2DB981B5666BC009B8287 /* yaml_private.h in Headers */ = {isa = PBXBuildFile; fileRef = FDB2DB8E1B5666BC009B8287 /* yaml_private.h */; };
+		FDB2DB9B1B567114009B8287 /* config.h in Headers */ = {isa = PBXBuildFile; fileRef = FDB2DB9A1B567114009B8287 /* config.h */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		FDB2DB731B565D2B009B8287 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = FDB2DB5E1B565D2B009B8287 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = FDB2DB661B565D2B009B8287;
+			remoteInfo = "swift-yaml";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		FDB2DB671B565D2B009B8287 /* SwiftYAML.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SwiftYAML.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		FDB2DB6A1B565D2B009B8287 /* SwiftYAML.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SwiftYAML.h; sourceTree = "<group>"; };
+		FDB2DB6C1B565D2B009B8287 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		FDB2DB711B565D2B009B8287 /* swift-yamlTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "swift-yamlTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		FDB2DB761B565D2B009B8287 /* swift_yamlTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = swift_yamlTests.swift; sourceTree = "<group>"; };
+		FDB2DB781B565D2B009B8287 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		FDB2DB811B565FD3009B8287 /* YAML.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YAML.swift; sourceTree = "<group>"; };
+		FDB2DB851B5666BC009B8287 /* api.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = api.c; sourceTree = "<group>"; };
+		FDB2DB861B5666BC009B8287 /* dumper.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = dumper.c; sourceTree = "<group>"; };
+		FDB2DB871B5666BC009B8287 /* emitter.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = emitter.c; sourceTree = "<group>"; };
+		FDB2DB881B5666BC009B8287 /* loader.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = loader.c; sourceTree = "<group>"; };
+		FDB2DB891B5666BC009B8287 /* parser.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = parser.c; sourceTree = "<group>"; };
+		FDB2DB8A1B5666BC009B8287 /* reader.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = reader.c; sourceTree = "<group>"; };
+		FDB2DB8B1B5666BC009B8287 /* scanner.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = scanner.c; sourceTree = "<group>"; };
+		FDB2DB8C1B5666BC009B8287 /* writer.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = writer.c; sourceTree = "<group>"; };
+		FDB2DB8D1B5666BC009B8287 /* yaml.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = yaml.h; sourceTree = "<group>"; };
+		FDB2DB8E1B5666BC009B8287 /* yaml_private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = yaml_private.h; sourceTree = "<group>"; };
+		FDB2DB9A1B567114009B8287 /* config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = config.h; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		FDB2DB631B565D2B009B8287 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FDB2DB6E1B565D2B009B8287 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FDB2DB721B565D2B009B8287 /* SwiftYAML.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		FDB2DB5D1B565D2B009B8287 = {
+			isa = PBXGroup;
+			children = (
+				FDB2DB691B565D2B009B8287 /* swift-yaml */,
+				FDB2DB751B565D2B009B8287 /* swift-yamlTests */,
+				FDB2DB681B565D2B009B8287 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		FDB2DB681B565D2B009B8287 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				FDB2DB671B565D2B009B8287 /* SwiftYAML.framework */,
+				FDB2DB711B565D2B009B8287 /* swift-yamlTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		FDB2DB691B565D2B009B8287 /* swift-yaml */ = {
+			isa = PBXGroup;
+			children = (
+				FDB2DB841B5666BC009B8287 /* LibYAML */,
+				FDB2DB6A1B565D2B009B8287 /* SwiftYAML.h */,
+				FDB2DB811B565FD3009B8287 /* YAML.swift */,
+				FDB2DB6C1B565D2B009B8287 /* Info.plist */,
+			);
+			path = "swift-yaml";
+			sourceTree = "<group>";
+		};
+		FDB2DB751B565D2B009B8287 /* swift-yamlTests */ = {
+			isa = PBXGroup;
+			children = (
+				FDB2DB761B565D2B009B8287 /* swift_yamlTests.swift */,
+				FDB2DB781B565D2B009B8287 /* Info.plist */,
+			);
+			path = "swift-yamlTests";
+			sourceTree = "<group>";
+		};
+		FDB2DB841B5666BC009B8287 /* LibYAML */ = {
+			isa = PBXGroup;
+			children = (
+				FDB2DB851B5666BC009B8287 /* api.c */,
+				FDB2DB861B5666BC009B8287 /* dumper.c */,
+				FDB2DB871B5666BC009B8287 /* emitter.c */,
+				FDB2DB881B5666BC009B8287 /* loader.c */,
+				FDB2DB891B5666BC009B8287 /* parser.c */,
+				FDB2DB8A1B5666BC009B8287 /* reader.c */,
+				FDB2DB8B1B5666BC009B8287 /* scanner.c */,
+				FDB2DB8C1B5666BC009B8287 /* writer.c */,
+				FDB2DB8D1B5666BC009B8287 /* yaml.h */,
+				FDB2DB8E1B5666BC009B8287 /* yaml_private.h */,
+				FDB2DB9A1B567114009B8287 /* config.h */,
+			);
+			path = LibYAML;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		FDB2DB641B565D2B009B8287 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FDB2DB9B1B567114009B8287 /* config.h in Headers */,
+				FDB2DB6B1B565D2B009B8287 /* SwiftYAML.h in Headers */,
+				FDB2DB981B5666BC009B8287 /* yaml_private.h in Headers */,
+				FDB2DB971B5666BC009B8287 /* yaml.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		FDB2DB661B565D2B009B8287 /* swift-yaml */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = FDB2DB7B1B565D2B009B8287 /* Build configuration list for PBXNativeTarget "swift-yaml" */;
+			buildPhases = (
+				FDB2DB621B565D2B009B8287 /* Sources */,
+				FDB2DB631B565D2B009B8287 /* Frameworks */,
+				FDB2DB641B565D2B009B8287 /* Headers */,
+				FDB2DB651B565D2B009B8287 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "swift-yaml";
+			productName = "swift-yaml";
+			productReference = FDB2DB671B565D2B009B8287 /* SwiftYAML.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		FDB2DB701B565D2B009B8287 /* swift-yamlTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = FDB2DB7E1B565D2B009B8287 /* Build configuration list for PBXNativeTarget "swift-yamlTests" */;
+			buildPhases = (
+				FDB2DB6D1B565D2B009B8287 /* Sources */,
+				FDB2DB6E1B565D2B009B8287 /* Frameworks */,
+				FDB2DB6F1B565D2B009B8287 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				FDB2DB741B565D2B009B8287 /* PBXTargetDependency */,
+			);
+			name = "swift-yamlTests";
+			productName = "swift-yamlTests";
+			productReference = FDB2DB711B565D2B009B8287 /* swift-yamlTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		FDB2DB5E1B565D2B009B8287 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 0700;
+				LastUpgradeCheck = 0700;
+				ORGANIZATIONNAME = "Invisible Pixel";
+				TargetAttributes = {
+					FDB2DB661B565D2B009B8287 = {
+						CreatedOnToolsVersion = 7.0;
+					};
+					FDB2DB701B565D2B009B8287 = {
+						CreatedOnToolsVersion = 7.0;
+					};
+				};
+			};
+			buildConfigurationList = FDB2DB611B565D2B009B8287 /* Build configuration list for PBXProject "swift-yaml" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = FDB2DB5D1B565D2B009B8287;
+			productRefGroup = FDB2DB681B565D2B009B8287 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				FDB2DB661B565D2B009B8287 /* swift-yaml */,
+				FDB2DB701B565D2B009B8287 /* swift-yamlTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		FDB2DB651B565D2B009B8287 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FDB2DB6F1B565D2B009B8287 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		FDB2DB621B565D2B009B8287 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FDB2DB911B5666BC009B8287 /* emitter.c in Sources */,
+				FDB2DB8F1B5666BC009B8287 /* api.c in Sources */,
+				FDB2DB901B5666BC009B8287 /* dumper.c in Sources */,
+				FDB2DB921B5666BC009B8287 /* loader.c in Sources */,
+				FDB2DB961B5666BC009B8287 /* writer.c in Sources */,
+				FDB2DB951B5666BC009B8287 /* scanner.c in Sources */,
+				FDB2DB931B5666BC009B8287 /* parser.c in Sources */,
+				FDB2DB821B565FD3009B8287 /* YAML.swift in Sources */,
+				FDB2DB941B5666BC009B8287 /* reader.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FDB2DB6D1B565D2B009B8287 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FDB2DB771B565D2B009B8287 /* swift_yamlTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		FDB2DB741B565D2B009B8287 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = FDB2DB661B565D2B009B8287 /* swift-yaml */;
+			targetProxy = FDB2DB731B565D2B009B8287 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		FDB2DB791B565D2B009B8287 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		FDB2DB7A1B565D2B009B8287 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = macosx;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		FDB2DB7C1B565D2B009B8287 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_VERSION = A;
+				INFOPLIST_FILE = "swift-yaml/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.invisiblepixel.swift-yaml";
+				PRODUCT_NAME = SwiftYAML;
+				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		FDB2DB7D1B565D2B009B8287 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_VERSION = A;
+				INFOPLIST_FILE = "swift-yaml/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.invisiblepixel.swift-yaml";
+				PRODUCT_NAME = SwiftYAML;
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
+		FDB2DB7F1B565D2B009B8287 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = "swift-yamlTests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.invisiblepixel.swift-yamlTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		FDB2DB801B565D2B009B8287 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = "swift-yamlTests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.invisiblepixel.swift-yamlTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		FDB2DB611B565D2B009B8287 /* Build configuration list for PBXProject "swift-yaml" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FDB2DB791B565D2B009B8287 /* Debug */,
+				FDB2DB7A1B565D2B009B8287 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		FDB2DB7B1B565D2B009B8287 /* Build configuration list for PBXNativeTarget "swift-yaml" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FDB2DB7C1B565D2B009B8287 /* Debug */,
+				FDB2DB7D1B565D2B009B8287 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		FDB2DB7E1B565D2B009B8287 /* Build configuration list for PBXNativeTarget "swift-yamlTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FDB2DB7F1B565D2B009B8287 /* Debug */,
+				FDB2DB801B565D2B009B8287 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = FDB2DB5E1B565D2B009B8287 /* Project object */;
+}
