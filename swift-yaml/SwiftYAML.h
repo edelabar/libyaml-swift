@@ -15,3 +15,4 @@ FOUNDATION_EXPORT double swift_yamlVersionNumber;
 FOUNDATION_EXPORT const unsigned char swift_yamlVersionString[];
 
 #import <SwiftYAML/yaml.h>
+#import <SwiftYAML/yaml_helpers.h>

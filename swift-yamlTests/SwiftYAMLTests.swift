@@ -7,9 +7,9 @@
 //
 
 import XCTest
-@testable import swift_yaml
+@testable import SwiftYAML
 
-class swift_yamlTests: XCTestCase {
+class SwiftYAMLTests: XCTestCase {
     
     override func setUp() {
         super.setUp()
@@ -21,16 +21,14 @@ class swift_yamlTests: XCTestCase {
         super.tearDown()
     }
     
-    func testExample() {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
+    func testInitialize() {
+        try! YAML.load("title: Hello world\nsubtitle: Hello subtitle")
     }
     
-    func testPerformanceExample() {
-        // This is an example of a performance test case.
-        self.measureBlock {
-            // Put the code you want to measure the time of here.
-        }
+    func testFile1() {
+        let filePath = NSBundle(forClass: self.dynamicType).pathForResource("test1", ofType: "yml")!
+        let YAMLString = try! String(contentsOfFile: filePath)
+        try! YAML.load(YAMLString)
     }
     
 }
