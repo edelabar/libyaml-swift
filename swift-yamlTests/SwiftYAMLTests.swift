@@ -21,9 +21,9 @@ class SwiftYAMLTests: XCTestCase {
         super.tearDown()
     }
     
-    func testInitialize() {
-        try! YAML.load("title: Hello world\nsubtitle: Hello subtitle")
-    }
+//    func testInitialize() {
+//        try! YAML.load("title: Hello world\nsubtitle: Hello subtitle")
+//    }
     
     func testFile1() {
         let filePath = NSBundle(forClass: self.dynamicType).pathForResource("test1", ofType: "yml")!
