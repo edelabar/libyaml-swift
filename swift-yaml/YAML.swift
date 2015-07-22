@@ -15,7 +15,7 @@ public enum YAMLError: ErrorType {
 }
 
 public struct YAML {
-    public static func load(input: String) throws -> YAMLNode {
+    public static func load(input: String) throws -> YAMLValue {
         let parser = YAMLParser()
         return try parser.parse(input)
     }
@@ -42,7 +42,7 @@ private class YAMLParser {
         yaml_event_delete(self.event)
     }
     
-    func parse(input: String) throws -> YAMLNode {
+    func parse(input: String) throws -> YAMLValue {
         let initialized = yaml_parser_initialize(self.parser);
         guard initialized == 1 else {
             throw YAMLError.UnknownError
@@ -68,7 +68,7 @@ private class YAMLParser {
         case YAML_STREAM_START_EVENT.rawValue:
             self.state = .WaitingForKey
         case YAML_DOCUMENT_START_EVENT.rawValue:
-            let value: YAMLNode = [:]
+            let value: YAMLValue = [:]
             self.rootNode = YAMLTree(value: value, parent: nil)
             self.state = .WaitingForKey
         case YAML_DOCUMENT_END_EVENT.rawValue:
@@ -81,13 +81,13 @@ private class YAMLParser {
             }
             self.state = .WaitingForKey
         case YAML_MAPPING_START_EVENT.rawValue:
-            let value: YAMLNode = [:]
+            let value: YAMLValue = [:]
             let anchor = String.fromCString(yaml_cstring_char(yaml_event_mapping_start_anchor(event)))
             self.pushNode(value, anchor: anchor)
         case YAML_MAPPING_END_EVENT.rawValue:
             self.popNode()
         case YAML_SEQUENCE_START_EVENT.rawValue:
-            let value: YAMLNode = []
+            let value: YAMLValue = []
             self.pushNode(value)
         case YAML_SEQUENCE_END_EVENT.rawValue:
             self.popNode()
@@ -103,7 +103,7 @@ private class YAMLParser {
             else {
 //                print("value: \(valueString)")
                 if let node = self.currentNode {
-                    node.value[self.currentKey!] = YAMLNode.String(valueString)
+                    node.value[self.currentKey!] = YAMLValue.String(valueString)
                 }
                 self.state = .WaitingForKey
             }
@@ -118,7 +118,7 @@ private class YAMLParser {
         return false
     }
     
-    private func pushNode(value: YAMLNode, anchor: String? = nil) {
+    private func pushNode(value: YAMLValue, anchor: String? = nil) {
         self.level++
         guard self.level > 0 else {
             self.currentNode = self.rootNode
@@ -138,11 +138,11 @@ private class YAMLParser {
         if let parent = self.currentNode?.parent {
             if case .Array(var array) = parent.value {
                 array.append(self.currentNode!.value)
-                parent.value = YAMLNode.Array(array)
+                parent.value = YAMLValue.Array(array)
             }
             else if case .Dictionary(var dict) = parent.value {
                 dict[self.currentNode!.key!] = self.currentNode!.value
-                parent.value = YAMLNode.Dictionary(dict)
+                parent.value = YAMLValue.Dictionary(dict)
             }
         }
         
@@ -156,11 +156,11 @@ private class YAMLTree {
     var children = [YAMLTree]()
     
     let key: String?
-    var value: YAMLNode
+    var value: YAMLValue
     
     let anchor: String?
-        
-    init(value: YAMLNode, parent: YAMLTree?, key: String? = nil, anchor: String? = nil) {
+    
+    init(value: YAMLValue, parent: YAMLTree?, key: String? = nil, anchor: String? = nil) {
         self.value = value;
         self.parent = parent
         self.key = key

@@ -8,17 +8,17 @@
 
 import Foundation
 
-public enum YAMLNode {
+public enum YAMLValue {
     case None
     case Bool(Swift.Bool)
     case Int(Swift.Int)
     case Double(Swift.Double)
     case String(Swift.String)
-    case Array([YAMLNode])
-    case Dictionary([Swift.String: YAMLNode])
+    case Array([YAMLValue])
+    case Dictionary([Swift.String: YAMLValue])
 }
 
-extension YAMLNode: Hashable {
+extension YAMLValue: Hashable {
     public var hashValue: Swift.Int {
         switch self {
         case .None:
@@ -39,8 +39,8 @@ extension YAMLNode: Hashable {
     }
 }
 
-extension YAMLNode: Equatable {}
-public func == (lhs: YAMLNode, rhs: YAMLNode) -> Bool {
+extension YAMLValue: Equatable {}
+public func == (lhs: YAMLValue, rhs: YAMLValue) -> Bool {
     var equal = false
     switch lhs {
     case .None:
@@ -61,31 +61,31 @@ public func == (lhs: YAMLNode, rhs: YAMLNode) -> Bool {
     return equal
 }
 
-extension YAMLNode: NilLiteralConvertible {
+extension YAMLValue: NilLiteralConvertible {
     public init(nilLiteral: ()) {
         self = .None
     }
 }
 
-extension YAMLNode: BooleanLiteralConvertible {
+extension YAMLValue: BooleanLiteralConvertible {
     public init(booleanLiteral: BooleanLiteralType) {
         self = .Bool(booleanLiteral)
     }
 }
 
-extension YAMLNode: IntegerLiteralConvertible {
+extension YAMLValue: IntegerLiteralConvertible {
     public init(integerLiteral: IntegerLiteralType) {
         self = .Int(integerLiteral)
     }
 }
 
-extension YAMLNode: FloatLiteralConvertible {
+extension YAMLValue: FloatLiteralConvertible {
     public init(floatLiteral: FloatLiteralType) {
         self = .Double(floatLiteral)
     }
 }
 
-extension YAMLNode: StringLiteralConvertible {
+extension YAMLValue: StringLiteralConvertible {
     public init(stringLiteral: StringLiteralType) {
         self = .String(stringLiteral)
     }
@@ -99,9 +99,9 @@ extension YAMLNode: StringLiteralConvertible {
     }
 }
 
-extension YAMLNode: ArrayLiteralConvertible {
-    public init(arrayLiteral elements: YAMLNode...) {
-        var array = [YAMLNode]()
+extension YAMLValue: ArrayLiteralConvertible {
+    public init(arrayLiteral elements: YAMLValue...) {
+        var array = [YAMLValue]()
         array.reserveCapacity(elements.count)
         for element in elements {
             array.append(element)
@@ -110,9 +110,9 @@ extension YAMLNode: ArrayLiteralConvertible {
     }
 }
 
-extension YAMLNode: DictionaryLiteralConvertible {
-    public init(dictionaryLiteral elements: (Swift.String, YAMLNode)...) {
-        var dictionary = Swift.Dictionary<Swift.String, YAMLNode>()
+extension YAMLValue: DictionaryLiteralConvertible {
+    public init(dictionaryLiteral elements: (Swift.String, YAMLValue)...) {
+        var dictionary = Swift.Dictionary<Swift.String, YAMLValue>()
         for (k, v) in elements {
             dictionary[k] = v
         }
@@ -120,8 +120,8 @@ extension YAMLNode: DictionaryLiteralConvertible {
     }
 }
 
-extension YAMLNode {
-    subscript(key: Swift.String) -> YAMLNode? {
+extension YAMLValue {
+    subscript(key: Swift.String) -> YAMLValue? {
         get {
             switch self {
             case .Dictionary(let dictionary):
@@ -142,7 +142,7 @@ extension YAMLNode {
     }
 }
 
-extension YAMLNode: CustomDebugStringConvertible {
+extension YAMLValue: CustomDebugStringConvertible {
     public var debugDescription: Swift.String {
         switch self {
         case .None:
