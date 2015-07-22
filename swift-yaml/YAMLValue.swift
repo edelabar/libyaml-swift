@@ -50,11 +50,11 @@ public func == (lhs: YAMLValue, rhs: YAMLValue) -> Bool {
     case .Bool(let lv):
         if case .Bool(let rv) = rhs { equal = (lv == rv) }
     case .Int(let lv):
-        if case .Int(let rv) = rhs { equal == (lv == rv) }
+        if case .Int(let rv) = rhs { equal = (lv == rv) }
     case .Double(let lv):
-        if case .Double(let rv) = rhs { equal == (lv == rv) }
+        if case .Double(let rv) = rhs { equal = (lv == rv) }
     case .Array(let lv):
-        if case .Array(let rv) = rhs { equal == (lv == rv) }
+        if case .Array(let rv) = rhs { equal = (lv == rv) }
     case .Dictionary(let lv):
         if case .Dictionary(let rv) = rhs { equal = (lv == rv) }
     }
