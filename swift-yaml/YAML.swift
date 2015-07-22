@@ -31,13 +31,11 @@ private class YAMLParser {
     let event = UnsafeMutablePointer<yaml_event_t>.alloc(sizeof(yaml_event_t))
     
     var state: YAMLScalarState = .WaitingForKey
-    var currentKey: String = ""
-    var level = 0
+    var currentKey: String?
+    var level: Int = -1
 
-    var nodes = [YAMLNode]()
-    var currentNode: YAMLNode {
-        return self.nodes[self.level]
-    }
+    var rootNode: YAMLTree?
+    var currentNode: YAMLTree?
     
     deinit {
         yaml_parser_delete(self.parser)
@@ -60,8 +58,8 @@ private class YAMLParser {
             done = handleEvent(self.event)
         }
         
-        print("YAML node: \(self.nodes.first!)")
-        return self.nodes.first!
+        print("YAML root node: \(self.rootNode!.value)")
+        return self.rootNode!.value
     }
     
     private func handleEvent(event: UnsafeMutablePointer<yaml_event_t>) -> Bool {
@@ -69,28 +67,31 @@ private class YAMLParser {
         switch event.memory.type.rawValue {
         case YAML_STREAM_START_EVENT.rawValue:
             print("start stream")
-            let rootNode = YAMLNode.Dictionary([String: YAMLNode]())
-            self.nodes.append(rootNode)
         case YAML_DOCUMENT_START_EVENT.rawValue:
             print("document start")
+            let value: YAMLNode = [:]
+            self.rootNode = YAMLTree(value: value, parent: nil)
             self.state = .WaitingForKey
         case YAML_DOCUMENT_END_EVENT.rawValue:
             print("document start")
             self.state = .WaitingForKey
         case YAML_ALIAS_EVENT.rawValue:
             print("alias event")
+            self.state = .WaitingForKey
         case YAML_MAPPING_START_EVENT.rawValue:
             print("start mapping")
-            self.handleMappingStartEvent(event)
+            let value: YAMLNode = [:]
+            self.pushNode(value)
         case YAML_MAPPING_END_EVENT.rawValue:
             print("end mapping")
-            self.handleMappingEndEvent(event)
+            self.popNode()
         case YAML_SEQUENCE_START_EVENT.rawValue:
             print("start sequence")
-            self.state = .WaitingForKey
+            let value: YAMLNode = []
+            self.pushNode(value)
         case YAML_SEQUENCE_END_EVENT.rawValue:
             print("end sequence")
-            self.state = .WaitingForKey
+            self.popNode()
         case YAML_SCALAR_EVENT.rawValue:
             let value = yaml_event_scalar_value(event)
             let valueString = String.fromCString(yaml_cstring_char(value))!
@@ -102,7 +103,9 @@ private class YAMLParser {
             }
             else {
                 print("value: \(valueString)")
-//                self.currentNode[self.currentKey] = YAMLNode.String(valueString)
+                if let node = self.currentNode {
+                    node.value[self.currentKey!] = YAMLNode.String(valueString)
+                }
                 self.state = .WaitingForKey
             }
             
@@ -117,21 +120,77 @@ private class YAMLParser {
         return false
     }
     
-    private func handleMappingStartEvent(event: UnsafeMutablePointer<yaml_event_t>) {
-        var currentNode = self.nodes[self.level]
+    private func pushNode(value: YAMLNode) {
         self.level++
+        guard self.level > 0 else {
+            self.currentNode = self.rootNode
+            return
+        }
         
-        let newNode = YAMLNode.Dictionary([String: YAMLNode]())
-        currentNode[self.currentKey] = newNode
-        self.nodes.append(newNode)
-    
+        let newNode = YAMLTree(value: value, parent: self.currentNode, key: self.currentKey!)
+        self.currentNode!.children.append(newNode)
+        self.currentNode = newNode
+        
         self.state = .WaitingForKey
     }
     
-    private func handleMappingEndEvent(event: UnsafeMutablePointer<yaml_event_t>) {
+    private func popNode() {
         self.level--
-        self.nodes.removeLast()
+        
+        if let parent = self.currentNode?.parent {
+            if case .Array(var array) = parent.value {
+                array.append(self.currentNode!.value)
+                parent.value = YAMLNode.Array(array)
+            }
+            else if case .Dictionary(var dict) = parent.value {
+                dict[self.currentNode!.key!] = self.currentNode!.value
+                parent.value = YAMLNode.Dictionary(dict)
+            }
+        }
+        
+        self.currentNode = self.currentNode!.parent
         self.state = .WaitingForKey
+    }
+}
+
+private class YAMLTree {
+    let parent: YAMLTree?
+    var children = [YAMLTree]()
+    
+    let key: String?
+    var value: YAMLNode
+    
+    var level: Int {
+        var level = 0
+        var parent = self.parent
+        while parent != nil {
+            parent = parent?.parent
+            level++
+        }
+        return level
+    }
+    
+    init(value: YAMLNode, parent: YAMLTree?, key: String? = nil) {
+        self.value = value;
+        self.parent = parent
+        self.key = key
+    }
+}
+
+extension YAMLTree: CustomDebugStringConvertible {
+    var debugDescription: String {
+        
+        var prefix = ""
+        for _ in 0...self.level {
+            prefix += "  "
+        }
+        
+        var desc = "\n\(prefix)\(self.level). value: \(self.value), key: \(self.key)"
+        for child in self.children {
+            desc += "\n\(prefix) child: \(child)"
+        }
+        
+        return desc
     }
 }
 
