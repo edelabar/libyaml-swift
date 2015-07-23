@@ -81,6 +81,13 @@ class SwiftYAMLTests: XCTestCase {
         XCTAssertEqual(value, expected)
     }
     
+    func testArrayAlternativeSyntax() {
+        let YAMLString = "products: [foo, bar]"
+        let value = try! YAML.load(YAMLString)
+        let expected: YAMLValue = ["products": ["foo", "bar"]]
+        XCTAssertEqual(value, expected)
+    }
+    
     func testMappingValue() {
         let YAMLString = "bill-to:\n" +
                          "  given: Chris\n" +
