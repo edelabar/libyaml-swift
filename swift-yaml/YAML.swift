@@ -58,7 +58,6 @@ private class YAMLParser {
             done = try handleEvent(self.event)
         }
         
-        print("YAML root node: \(self.rootNode!.value)")
         return self.rootNode!.value
     }
     
