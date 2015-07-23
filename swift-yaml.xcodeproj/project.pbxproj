@@ -24,10 +24,8 @@
 		FDB2DB9B1B567114009B8287 /* config.h in Headers */ = {isa = PBXBuildFile; fileRef = FDB2DB9A1B567114009B8287 /* config.h */; };
 		FDB2DB9D1B568317009B8287 /* yaml_helpers.h in Headers */ = {isa = PBXBuildFile; fileRef = FDB2DB9C1B5681D3009B8287 /* yaml_helpers.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		FDB2DB9F1B568442009B8287 /* yaml_helpers.c in Sources */ = {isa = PBXBuildFile; fileRef = FDB2DB9E1B568442009B8287 /* yaml_helpers.c */; };
-		FDB2DBA11B56941C009B8287 /* test1.yml in Resources */ = {isa = PBXBuildFile; fileRef = FDB2DBA01B56941C009B8287 /* test1.yml */; };
 		FDB2DBA31B569ADF009B8287 /* YAMLValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDB2DBA21B569ADF009B8287 /* YAMLValue.swift */; };
-		FDFAB4FD1B5FE00F0004E035 /* test2.yml in Resources */ = {isa = PBXBuildFile; fileRef = FDFAB4FC1B5FE00F0004E035 /* test2.yml */; };
-		FDFAB4FF1B5FEA430004E035 /* ascii.yml in Resources */ = {isa = PBXBuildFile; fileRef = FDFAB4FE1B5FEA430004E035 /* ascii.yml */; };
+		FDFAB5011B6113440004E035 /* TestHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDFAB5001B6113440004E035 /* TestHelpers.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -61,10 +59,8 @@
 		FDB2DB9A1B567114009B8287 /* config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = config.h; sourceTree = "<group>"; };
 		FDB2DB9C1B5681D3009B8287 /* yaml_helpers.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = yaml_helpers.h; sourceTree = "<group>"; };
 		FDB2DB9E1B568442009B8287 /* yaml_helpers.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = yaml_helpers.c; sourceTree = "<group>"; };
-		FDB2DBA01B56941C009B8287 /* test1.yml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = test1.yml; sourceTree = "<group>"; };
 		FDB2DBA21B569ADF009B8287 /* YAMLValue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YAMLValue.swift; sourceTree = "<group>"; };
-		FDFAB4FC1B5FE00F0004E035 /* test2.yml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = test2.yml; sourceTree = "<group>"; };
-		FDFAB4FE1B5FEA430004E035 /* ascii.yml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ascii.yml; sourceTree = "<group>"; };
+		FDFAB5001B6113440004E035 /* TestHelpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestHelpers.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -121,9 +117,7 @@
 			children = (
 				FDB2DB761B565D2B009B8287 /* SwiftYAMLTests.swift */,
 				FDB2DB781B565D2B009B8287 /* Info.plist */,
-				FDB2DBA01B56941C009B8287 /* test1.yml */,
-				FDFAB4FC1B5FE00F0004E035 /* test2.yml */,
-				FDFAB4FE1B5FEA430004E035 /* ascii.yml */,
+				FDFAB5001B6113440004E035 /* TestHelpers.swift */,
 			);
 			path = "swift-yamlTests";
 			sourceTree = "<group>";
@@ -250,9 +244,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FDB2DBA11B56941C009B8287 /* test1.yml in Resources */,
-				FDFAB4FF1B5FEA430004E035 /* ascii.yml in Resources */,
-				FDFAB4FD1B5FE00F0004E035 /* test2.yml in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -282,6 +273,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				FDB2DB771B565D2B009B8287 /* SwiftYAMLTests.swift in Sources */,
+				FDFAB5011B6113440004E035 /* TestHelpers.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

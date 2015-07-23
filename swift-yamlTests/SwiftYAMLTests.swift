@@ -11,30 +11,6 @@ import XCTest
 
 class SwiftYAMLTests: XCTestCase {
     
-//    func testFile1() {
-//        let filePath = NSBundle(forClass: self.dynamicType).pathForResource("test1", ofType: "yml")!
-//        let YAMLString = try! String(contentsOfFile: filePath)
-//        try! YAML.load(YAMLString)
-//    }
-//    
-//    func testFile2() {
-//        let filePath = NSBundle(forClass: self.dynamicType).pathForResource("test2", ofType: "yml")!
-//        let YAMLString = try! String(contentsOfFile: filePath)
-//        try! YAML.load(YAMLString)
-//    }
-//    func testASCIIArt() {
-//        let filePath = NSBundle(forClass: self.dynamicType).pathForResource("ascii", ofType: "yml")!
-//        let YAMLString = try! String(contentsOfFile: filePath)
-//        try! YAML.load(YAMLString)
-//    }
-    
-    func testScalarRootValue() {
-        let YAMLString = "foo"
-        let value = try! YAML.load(YAMLString)
-        let expected: YAMLValue = "foo"
-        XCTAssertEqual(value, expected)
-    }
-    
     ///-------------------------------------------------
     /// @name Scalars
     ///-------------------------------------------------
@@ -172,5 +148,30 @@ class SwiftYAMLTests: XCTestCase {
         let value = try! YAML.load(YAMLString)
         let expected: YAMLValue = ["tree": ["node": nil, "parent": ["node": nil]]]
         XCTAssertEqual(value, expected)
+    }
+    
+    ///-------------------------------------------------
+    /// @name Other
+    ///-------------------------------------------------
+    
+    func testScalarRootValue() {
+        let YAMLString = "foo"
+        let value = try! YAML.load(YAMLString)
+        let expected: YAMLValue = "foo"
+        XCTAssertEqual(value, expected)
+    }
+    
+    func testSequenceRootValue() {
+        let YAMLString = "- foo\n" +
+        "- bar"
+        let value = try! YAML.load(YAMLString)
+        let expected: YAMLValue = ["foo", "bar"]
+        XCTAssertEqual(value, expected)
+    }
+    
+    func testIllegalMapping() {
+        let YAMLString = "foo\n" +
+        "foo: bar"
+        XCTempAssertThrowsSpecificError(YAMLError.ParseError) { try YAML.load(YAMLString) }
     }
 }
