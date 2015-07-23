@@ -28,6 +28,13 @@ class SwiftYAMLTests: XCTestCase {
 //        try! YAML.load(YAMLString)
 //    }
     
+    func testScalarRootValue() {
+        let YAMLString = "foo"
+        let value = try! YAML.load(YAMLString)
+        let expected: YAMLValue = "foo"
+        XCTAssertEqual(value, expected)
+    }
+    
     ///-------------------------------------------------
     /// @name Scalars
     ///-------------------------------------------------
@@ -140,6 +147,30 @@ class SwiftYAMLTests: XCTestCase {
         let value = try! YAML.load(YAMLString)
         // expect bar to be integer because integers can not be cast to bool
         let expected: YAMLValue = ["foo": "0"]
+        XCTAssertEqual(value, expected)
+    }
+    
+    ///-------------------------------------------------
+    /// @name Aliases
+    ///-------------------------------------------------
+    
+    func testAlias() {
+        let YAMLString = "bill-to: &id001 \n" +
+                         "  given: Chris\n" +
+                         "  family: Dumars\n" +
+                         "ship-to: *id001"
+        let value = try! YAML.load(YAMLString)
+        let address: YAMLValue = ["given": "Chris", "family": "Dumars"]
+        let expected: YAMLValue = ["bill-to": address, "ship-to": address]
+        XCTAssertEqual(value, expected)
+    }
+    
+    func testSelfReferencingAlias() {
+        let YAMLString = "tree: &parent \n" +
+                         "  node: null\n" +
+                         "  parent: *parent \n"
+        let value = try! YAML.load(YAMLString)
+        let expected: YAMLValue = ["tree": ["node": nil, "parent": ["node": nil]]]
         XCTAssertEqual(value, expected)
     }
 }
