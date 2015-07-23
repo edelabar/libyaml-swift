@@ -37,6 +37,8 @@ private class YAMLParser {
     var rootNode: YAMLTree?
     var currentNode: YAMLTree?
     
+    var skipNextValue: Bool = false
+    
     deinit {
         yaml_parser_delete(self.parser)
         yaml_event_delete(self.event)
@@ -95,10 +97,14 @@ private class YAMLParser {
         case YAML_SCALAR_EVENT.rawValue:
             let (stringValue, value) = try valueForScalarEvent(event)
             if case .WaitingForKey = state {
+                if case YAMLValue.None = value {
+                    // skip 'null' keys
+                    self.skipNextValue = true
+                }
                 self.currentKey = stringValue
                 self.state = .WaitingForValue
             }
-            else {
+            else if !self.skipNextValue {
                 if let node = self.currentNode {
                     node.value[self.currentKey!] = value
                 }
@@ -151,9 +157,15 @@ private class YAMLParser {
             throw YAMLError.ParseError
         }
         
-//        let tag = yaml_event_scalar_tag(event);
-//        let tagString = String.fromCString(yaml_cstring_char(tag))
-//        print("tag: \(tagString)")
+        let tag = yaml_event_scalar_tag(event);
+        let tagString = String.fromCString(yaml_cstring_char(tag))
+        if let tagString = tagString {
+            print("tag: \(tagString)")
+            
+            if tagString == YAML_NULL_TAG {
+                return (stringValue, YAMLValue.None)
+            }
+        }
         
         let style = yaml_event_scalar_style(event)
         if style == YAML_PLAIN_SCALAR_STYLE {
@@ -166,15 +178,17 @@ private class YAMLParser {
                 let double = Double(stringValue)!
                 return (stringValue, YAMLValue.Double(double))
             }
-            else if stringValue == "true" {
+            else if ["true", "True", "TRUE"].contains(stringValue) {
                 return (stringValue, YAMLValue.Bool(true))
             }
-            else if stringValue == "false" {
+            else if ["false", "False", "FALSE"].contains(stringValue) {
                 return (stringValue, YAMLValue.Bool(false))
             }
-            else if stringValue == "null" {
+            else if ["", "null", "~"].contains(stringValue) {
                 return (stringValue, YAMLValue.None)
             }
+            
+            // TODO: add support for HEX values
         }
         
         return (stringValue, YAMLValue.String(stringValue))

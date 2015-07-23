@@ -28,6 +28,10 @@ class SwiftYAMLTests: XCTestCase {
 //        try! YAML.load(YAMLString)
 //    }
     
+    ///-------------------------------------------------
+    /// @name Scalars
+    ///-------------------------------------------------
+    
     func testScalarValue() {
         let YAMLString = "foo: bar"
         let value = try! YAML.load(YAMLString)
@@ -64,6 +68,24 @@ class SwiftYAMLTests: XCTestCase {
         XCTAssertEqual(value, expected)
     }
     
+    func testScalarEmptyValue() {
+        let YAMLString = "nothing: "
+        let value = try! YAML.load(YAMLString)
+        let expected: YAMLValue = ["nothing": nil]
+        XCTAssertEqual(value, expected)
+    }
+    
+    func testScalarTildeValue() {
+        let YAMLString = "nothing: ~"
+        let value = try! YAML.load(YAMLString)
+        let expected: YAMLValue = ["nothing": nil]
+        XCTAssertEqual(value, expected)
+    }
+    
+    ///-------------------------------------------------
+    /// @name Mappings and sequences
+    ///-------------------------------------------------
+    
     func testArrayValue() {
         let YAMLString = "products:\n" +
                          "  - name: foo\n" +
@@ -86,4 +108,22 @@ class SwiftYAMLTests: XCTestCase {
 //        XCTAssertEqual(value, expected)
 //    }
 
+    ///-------------------------------------------------
+    /// @name Tags
+    ///-------------------------------------------------
+    
+    func testValueForNullKey() {
+        let YAMLString = "!!null key: value"
+        let value = try! YAML.load(YAMLString)
+        // we expect an empty dictionary, because 'null' keys are skipped over
+        let expected: YAMLValue = [:]
+        XCTAssertEqual(value, expected)
+    }
+    
+    func testNullValueForKey() {
+        let YAMLString = "key: !!null value"
+        let value = try! YAML.load(YAMLString)
+        let expected: YAMLValue = ["key": nil]
+        XCTAssertEqual(value, expected)
+    }
 }
