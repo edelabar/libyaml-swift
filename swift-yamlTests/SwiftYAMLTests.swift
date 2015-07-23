@@ -163,7 +163,7 @@ class SwiftYAMLTests: XCTestCase {
     
     func testSequenceRootValue() {
         let YAMLString = "- foo\n" +
-        "- bar"
+                         "- bar"
         let value = try! YAML.load(YAMLString)
         let expected: YAMLValue = ["foo", "bar"]
         XCTAssertEqual(value, expected)
@@ -171,7 +171,7 @@ class SwiftYAMLTests: XCTestCase {
     
     func testIllegalMapping() {
         let YAMLString = "foo\n" +
-        "foo: bar"
+                         "foo: bar"
         XCTempAssertThrowsSpecificError(YAMLError.ParseError) { try YAML.load(YAMLString) }
     }
 }
