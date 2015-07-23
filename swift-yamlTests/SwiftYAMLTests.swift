@@ -158,6 +158,27 @@ class SwiftYAMLTests: XCTestCase {
     }
     
     ///-------------------------------------------------
+    /// @name Documents
+    ///-------------------------------------------------
+    
+    func testMultipleDocuments() {
+        let YAMLString = "--- document1\n--- document2"
+        let value = try! YAML.loadMultiple(YAMLString)
+        let expected: [YAMLValue] = ["document1", "document2"]
+        XCTAssertEqual(value, expected)
+    }
+    
+    func testMultipleDocumentsWithMappings() {
+        let YAMLString = "---\n" +
+                         "title: hello\n" +
+                         "---\n" +
+                         "title: world"
+        let value = try! YAML.loadMultiple(YAMLString)
+        let expected: [YAMLValue] = [["title": "hello"], ["title": "world"]]
+        XCTAssertEqual(value, expected)
+    }
+    
+    ///-------------------------------------------------
     /// @name Other
     ///-------------------------------------------------
     

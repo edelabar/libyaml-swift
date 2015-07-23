@@ -17,6 +17,17 @@ public enum YAMLError: ErrorType {
 public struct YAML {
     public static func load(input: String) throws -> YAMLValue {
         let parser = YAMLParser()
+        let output = try parser.parse(input)
+        if let first = output.first {
+            return first
+        }
+        else {
+            throw YAMLError.UnknownError
+        }
+    }
+    
+    public static func loadMultiple(input: String) throws -> [YAMLValue] {
+        let parser = YAMLParser(allowMultiple: true)
         return try parser.parse(input)
     }
 }
@@ -34,15 +45,26 @@ private class YAMLParser {
     var currentKey: YAMLValue?
     var level: Int = 0
 
-    var rootNode: YAMLTree?
+    var rootNodes: [YAMLTree]
+    var currentRootNode: YAMLTree? {
+        return rootNodes.last
+    }
     var currentNode: YAMLTree?
+    
+    // whether parser should allow multiple documents in string
+    let allowMultiple: Bool
     
     deinit {
         yaml_parser_delete(self.parser)
         yaml_event_delete(self.event)
     }
     
-    func parse(input: String) throws -> YAMLValue {
+    init(allowMultiple: Bool = false) {
+        self.allowMultiple = allowMultiple
+        self.rootNodes = []
+    }
+    
+    func parse(input: String) throws -> [YAMLValue] {
         let initialized = yaml_parser_initialize(self.parser);
         guard initialized == 1 else {
             throw YAMLError.UnknownError
@@ -58,7 +80,9 @@ private class YAMLParser {
             done = try handleEvent(self.event)
         }
         
-        return self.rootNode!.value
+        return self.rootNodes.map({ node in
+            return node.value
+        })
     }
     
     private func handleEvent(event: UnsafeMutablePointer<yaml_event_t>) throws -> Bool {
@@ -70,9 +94,11 @@ private class YAMLParser {
             self.state = .WaitingForValue
         case YAML_DOCUMENT_END_EVENT.rawValue:
             self.level = 0
+            self.currentKey = nil
+            self.currentNode = nil
         case YAML_ALIAS_EVENT.rawValue:
             let anchor = String.fromCString(yaml_cstring_char(yaml_event_alias_anchor(event)))
-            if let anchor = anchor, let currentNode = self.currentNode, let anchorNode = self.rootNode?.treeWithAnchor(anchor) {
+            if let anchor = anchor, let currentNode = self.currentNode, let anchorNode = self.currentRootNode?.treeWithAnchor(anchor) {
                 currentNode.value[self.currentKey!] = anchorNode.value
                 currentNode.children.append(anchorNode)
             }
@@ -129,8 +155,9 @@ private class YAMLParser {
         }
         
         if self.level == 0 {
-            self.rootNode = YAMLTree(value: value, parent: nil)
-            self.currentNode = self.rootNode
+            let rootNode = YAMLTree(value: value, parent: nil)
+            self.currentNode = rootNode
+            self.rootNodes.append(rootNode)
             return
         }
         
