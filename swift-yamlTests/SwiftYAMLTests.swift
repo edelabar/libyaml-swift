@@ -127,4 +127,21 @@ class SwiftYAMLTests: XCTestCase {
         let expected: YAMLValue = ["key": nil]
         XCTAssertEqual(value, expected)
     }
+    
+    func testBoolTag() {
+        let YAMLString = "foo: !!bool true\n" +
+                         "bar: !!bool 0"
+        let value = try! YAML.load(YAMLString)
+        // expect bar to be integer because integers can not be cast to bool
+        let expected: YAMLValue = ["foo": true, "bar": 0]
+        XCTAssertEqual(value, expected)
+    }
+    
+    func testStringTag() {
+        let YAMLString = "foo: !!str 0"
+        let value = try! YAML.load(YAMLString)
+        // expect bar to be integer because integers can not be cast to bool
+        let expected: YAMLValue = ["foo": "0"]
+        XCTAssertEqual(value, expected)
+    }
 }

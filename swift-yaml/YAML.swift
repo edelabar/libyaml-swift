@@ -159,9 +159,14 @@ private class YAMLParser {
             if tagString == YAML_NULL_TAG {
                 return (stringValue, YAMLValue.None)
             }
-            else if tagString == YAML_BOOL_TAG {
-//                let bool = try Bool(stringValue)
-//                return (stringValue, bool)
+            else if tagString == YAML_STR_TAG {
+                return (stringValue, YAMLValue.String(stringValue))
+            }
+            else if tagString == YAML_TIMESTAMP_TAG {
+                // TODO: handle timestamp tag
+            }
+            else if tagString == YAML_BOOL_TAG || tagString == YAML_INT_TAG || tagString == YAML_FLOAT_TAG {
+                // do nothing because casting does not apply here
             }
         }
         
@@ -223,6 +228,5 @@ private class YAMLTree {
         return nil
     }
 }
-
 
 
