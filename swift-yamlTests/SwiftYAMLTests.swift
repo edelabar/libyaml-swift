@@ -84,7 +84,7 @@ class SwiftYAMLTests: XCTestCase {
     }
     
     ///-------------------------------------------------
-    /// @name Mappings and sequences
+    /// @name Collections
     ///-------------------------------------------------
     
     func testArrayValue() {
@@ -98,16 +98,14 @@ class SwiftYAMLTests: XCTestCase {
         XCTAssertEqual(value, expected)
     }
     
-//    func testMappingValue {
-//        let YAMLString = "products:\n" +
-//            "  - name: foo\n" +
-//            "    sku: 1\n" +
-//            "  - name: bar\n" +
-//        "    sku: 2"
-//        let value = try! YAML.load(YAMLString)
-//        let expected: YAMLValue = ["products": [["name": "foo", "sku": 1], ["name": "bar", "sku": 2]]]
-//        XCTAssertEqual(value, expected)
-//    }
+    func testMappingValue() {
+        let YAMLString = "bill-to:\n" +
+                         "  given: Chris\n" +
+                         "  family: Dumars"
+        let value = try! YAML.load(YAMLString)
+        let expected: YAMLValue = ["bill-to": ["given": "Chris", "family": "Dumars"]]
+        XCTAssertEqual(value, expected)
+    }
 
     ///-------------------------------------------------
     /// @name Tags
