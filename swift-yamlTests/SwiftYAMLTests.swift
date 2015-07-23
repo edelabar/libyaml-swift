@@ -57,7 +57,8 @@ class SwiftYAMLTests: XCTestCase {
         let YAMLString = "true: true\n" +
                          "false: false"
         let value = try! YAML.load(YAMLString)
-        let expected: YAMLValue = ["true": true, "false": false]
+        // keys as well as values can represent booleans
+        let expected: YAMLValue = [true: true, false: false]
         XCTAssertEqual(value, expected)
     }
     
@@ -116,7 +117,7 @@ class SwiftYAMLTests: XCTestCase {
         let YAMLString = "!!null key: value"
         let value = try! YAML.load(YAMLString)
         // we expect an empty dictionary, because 'null' keys are skipped over
-        let expected: YAMLValue = [:]
+        let expected: YAMLValue = [YAMLValue.None: "value"]
         XCTAssertEqual(value, expected)
     }
     

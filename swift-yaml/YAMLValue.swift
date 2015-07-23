@@ -15,7 +15,7 @@ public enum YAMLValue {
     case Double(Swift.Double)
     case String(Swift.String)
     case Array([YAMLValue])
-    case Dictionary([Swift.String: YAMLValue])
+    case Dictionary([YAMLValue: YAMLValue])
 }
 
 extension YAMLValue: Hashable {
@@ -111,8 +111,8 @@ extension YAMLValue: ArrayLiteralConvertible {
 }
 
 extension YAMLValue: DictionaryLiteralConvertible {
-    public init(dictionaryLiteral elements: (Swift.String, YAMLValue)...) {
-        var dictionary = Swift.Dictionary<Swift.String, YAMLValue>()
+    public init(dictionaryLiteral elements: (YAMLValue, YAMLValue)...) {
+        var dictionary = Swift.Dictionary<YAMLValue, YAMLValue>()
         for (k, v) in elements {
             dictionary[k] = v
         }
@@ -122,6 +122,26 @@ extension YAMLValue: DictionaryLiteralConvertible {
 
 extension YAMLValue {
     subscript(key: Swift.String) -> YAMLValue? {
+        get {
+            switch self {
+            case .Dictionary(let dictionary):
+                return dictionary[YAMLValue.String(key)]
+            default:
+                return nil
+            }
+        }
+        set {
+            switch self {
+            case .Dictionary(var dictionary):
+                dictionary[YAMLValue.String(key)] = newValue
+                self = .Dictionary(dictionary)
+            default:
+                assert(false, "Can't use subscript on type which is not a dictionary")
+            }
+        }
+    }
+    
+    subscript(key: YAMLValue) -> YAMLValue? {
         get {
             switch self {
             case .Dictionary(let dictionary):

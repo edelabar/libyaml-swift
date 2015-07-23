@@ -31,13 +31,11 @@ private class YAMLParser {
     let event = UnsafeMutablePointer<yaml_event_t>.alloc(sizeof(yaml_event_t))
     
     var state: YAMLScalarState = .WaitingForKey
-    var currentKey: String?
+    var currentKey: YAMLValue?
     var level: Int = -1
 
     var rootNode: YAMLTree?
     var currentNode: YAMLTree?
-    
-    var skipNextValue: Bool = false
     
     deinit {
         yaml_parser_delete(self.parser)
@@ -95,16 +93,12 @@ private class YAMLParser {
         case YAML_SEQUENCE_END_EVENT.rawValue:
             self.popNode()
         case YAML_SCALAR_EVENT.rawValue:
-            let (stringValue, value) = try valueForScalarEvent(event)
+            let (_, value) = try valueForScalarEvent(event)
             if case .WaitingForKey = state {
-                if case YAMLValue.None = value {
-                    // skip 'null' keys
-                    self.skipNextValue = true
-                }
-                self.currentKey = stringValue
+                self.currentKey = value
                 self.state = .WaitingForValue
             }
-            else if !self.skipNextValue {
+            else {
                 if let node = self.currentNode {
                     node.value[self.currentKey!] = value
                 }
@@ -165,6 +159,10 @@ private class YAMLParser {
             if tagString == YAML_NULL_TAG {
                 return (stringValue, YAMLValue.None)
             }
+            else if tagString == YAML_BOOL_TAG {
+//                let bool = try Bool(stringValue)
+//                return (stringValue, bool)
+            }
         }
         
         let style = yaml_event_scalar_style(event)
@@ -199,12 +197,12 @@ private class YAMLTree {
     let parent: YAMLTree?
     var children = [YAMLTree]()
     
-    let key: String?
+    let key: YAMLValue?
     var value: YAMLValue
     
     let anchor: String?
     
-    init(value: YAMLValue, parent: YAMLTree?, key: String? = nil, anchor: String? = nil) {
+    init(value: YAMLValue, parent: YAMLTree?, key: YAMLValue? = nil, anchor: String? = nil) {
         self.value = value;
         self.parent = parent
         self.key = key
