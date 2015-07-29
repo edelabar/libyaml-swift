@@ -26,6 +26,8 @@
 		FDB2DB9F1B568442009B8287 /* yaml_helpers.c in Sources */ = {isa = PBXBuildFile; fileRef = FDB2DB9E1B568442009B8287 /* yaml_helpers.c */; };
 		FDB2DBA31B569ADF009B8287 /* YAMLValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDB2DBA21B569ADF009B8287 /* YAMLValue.swift */; };
 		FDFAB5011B6113440004E035 /* TestHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDFAB5001B6113440004E035 /* TestHelpers.swift */; };
+		FDFAB5031B611F600004E035 /* YAMLParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDFAB5021B611F600004E035 /* YAMLParser.swift */; };
+		FDFAB5051B611FE50004E035 /* YAMLEmitter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDFAB5041B611FE50004E035 /* YAMLEmitter.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -61,6 +63,8 @@
 		FDB2DB9E1B568442009B8287 /* yaml_helpers.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = yaml_helpers.c; sourceTree = "<group>"; };
 		FDB2DBA21B569ADF009B8287 /* YAMLValue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YAMLValue.swift; sourceTree = "<group>"; };
 		FDFAB5001B6113440004E035 /* TestHelpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestHelpers.swift; sourceTree = "<group>"; };
+		FDFAB5021B611F600004E035 /* YAMLParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YAMLParser.swift; sourceTree = "<group>"; };
+		FDFAB5041B611FE50004E035 /* YAMLEmitter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YAMLEmitter.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -107,6 +111,8 @@
 				FDB2DB6A1B565D2B009B8287 /* SwiftYAML.h */,
 				FDB2DB811B565FD3009B8287 /* YAML.swift */,
 				FDB2DBA21B569ADF009B8287 /* YAMLValue.swift */,
+				FDFAB5021B611F600004E035 /* YAMLParser.swift */,
+				FDFAB5041B611FE50004E035 /* YAMLEmitter.swift */,
 				FDB2DB6C1B565D2B009B8287 /* Info.plist */,
 			);
 			path = "swift-yaml";
@@ -256,6 +262,7 @@
 			files = (
 				FDB2DBA31B569ADF009B8287 /* YAMLValue.swift in Sources */,
 				FDB2DB911B5666BC009B8287 /* emitter.c in Sources */,
+				FDFAB5051B611FE50004E035 /* YAMLEmitter.swift in Sources */,
 				FDB2DB8F1B5666BC009B8287 /* api.c in Sources */,
 				FDB2DB9F1B568442009B8287 /* yaml_helpers.c in Sources */,
 				FDB2DB901B5666BC009B8287 /* dumper.c in Sources */,
@@ -265,6 +272,7 @@
 				FDB2DB931B5666BC009B8287 /* parser.c in Sources */,
 				FDB2DB821B565FD3009B8287 /* YAML.swift in Sources */,
 				FDB2DB941B5666BC009B8287 /* reader.c in Sources */,
+				FDFAB5031B611F600004E035 /* YAMLParser.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
