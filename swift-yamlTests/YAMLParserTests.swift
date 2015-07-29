@@ -9,7 +9,7 @@
 import XCTest
 @testable import SwiftYAML
 
-class SwiftYAMLTests: XCTestCase {
+class YAMLParserTests: XCTestCase {
     
     ///-------------------------------------------------
     /// @name Scalars
