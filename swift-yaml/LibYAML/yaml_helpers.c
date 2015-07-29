@@ -44,3 +44,12 @@ yaml_char_t* yaml_event_alias_anchor(yaml_event_t *event) {
 char* yaml_cstring_char(yaml_char_t *data) {
     return (char *)data;
 }
+
+char* yaml_cstring_uint8(uint8_t *data) {
+    return (char *)data;
+}
+
+yaml_char_t* yaml_char_from_string(const unsigned char *string) {
+    return (yaml_char_t *)string;
+}
+

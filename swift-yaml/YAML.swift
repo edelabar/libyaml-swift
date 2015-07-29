@@ -31,7 +31,7 @@ public struct YAML {
         return try parser.parse(input)
     }
     
-    public static func generate(yaml: YAMLValue) throws -> String {
+    public static func emit(yaml: YAMLValue) throws -> String {
         let emitter = YAMLEmitter()
         return try emitter.emit(yaml)
     }
