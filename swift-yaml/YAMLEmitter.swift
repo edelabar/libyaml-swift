@@ -23,6 +23,7 @@ class YAMLEmitter {
         
         var outputStream = NSOutputStream.outputStreamToMemory()
         outputStream.open()
+        defer { outputStream.close() }
         func writeHandler(data: UnsafeMutablePointer<Void>, buffer: UnsafeMutablePointer<UInt8>, size: Int) -> Int32 {
             let outputPointer = UnsafeMutablePointer<NSOutputStream>(data)
             let outputStream: NSOutputStream = outputPointer.memory
