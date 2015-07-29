@@ -19,23 +19,19 @@ class YAMLEmitter {
         }        
         defer { yaml_emitter_delete(emitter) }
 
-//        func writeHandler(data: UnsafeMutablePointer<Void>, buffer: UnsafeMutablePointer<UInt8>, size: Int) -> Int32 {
-//            return Int32(0)
-//        }
-//        yaml_emitter_set_output(emitter, writeHandler, nil)
-        
-        
         yaml_emitter_set_canonical(emitter, 1)
         
-        let output = UnsafeMutablePointer<UInt8>.alloc(YAMLEmitter.bufferSize)
-        memset(output, 0, YAMLEmitter.bufferSize)
-        defer {
-            output.destroy()
-            output.dealloc(YAMLEmitter.bufferSize)
+        var outputStream = NSOutputStream.outputStreamToMemory()
+        outputStream.open()
+        func writeHandler(data: UnsafeMutablePointer<Void>, buffer: UnsafeMutablePointer<UInt8>, size: Int) -> Int32 {
+            let outputPointer = UnsafeMutablePointer<NSOutputStream>(data)
+            let outputStream: NSOutputStream = outputPointer.memory
+            let success = outputStream.write(buffer, maxLength: size) > 0
+            return success ? 1 : 0
         }
         
-        var sizeWritten: Int = 0
-        yaml_emitter_set_output_string(emitter, output, YAMLEmitter.bufferSize, &sizeWritten)
+        yaml_emitter_set_output(emitter, writeHandler, &outputStream)
+        yaml_emitter_set_encoding(emitter, YAML_UTF8_ENCODING)
         
         let event = UnsafeMutablePointer<yaml_event_t>.alloc(sizeof(yaml_event_t))
         defer { yaml_event_delete(event) }
@@ -48,7 +44,7 @@ class YAMLEmitter {
         yaml_document_start_event_initialize(event, nil, nil, nil, 1)
         yaml_emitter_emit(emitter, event)
 
-//        // populate document
+        // populate document
         emitYAMLValue(emitter, event: event, value: yaml)
 
         // end document
@@ -59,9 +55,9 @@ class YAMLEmitter {
         yaml_stream_end_event_initialize(event)
         yaml_emitter_emit(emitter, event)
         
-        let outputString = String.fromCString(yaml_cstring_uint8(output))!
-        print("emitter output: \(outputString)")
-        return outputString
+        let outputData = outputStream.propertyForKey(NSStreamDataWrittenToMemoryStreamKey) as! NSData
+        let outputString = NSString(data: outputData, encoding: NSUTF8StringEncoding)!
+        return outputString as String
     }
     
     private func emitYAMLValue(emitter: UnsafeMutablePointer<yaml_emitter_t>, event: UnsafeMutablePointer<yaml_event_t>, value: YAMLValue) {
