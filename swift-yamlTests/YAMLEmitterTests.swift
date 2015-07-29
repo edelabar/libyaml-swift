@@ -14,7 +14,12 @@ class YAMLEmitterTests: XCTestCase {
     func testScalarString() {
         let value: YAMLValue = "foo"
         let output = try! YAML.emit(value)
-        XCTAssertEqual(output, "---\n\"foo\"\n")
+        XCTAssertEqual(output, "--- foo\n...\n")
     }
 
+    func testMapping() {
+        let value: YAMLValue = ["foo": "bar"]
+        let output = try! YAML.emit(value)
+        XCTAssertEqual(output, "---\nfoo: bar\n")
+    }
 }
