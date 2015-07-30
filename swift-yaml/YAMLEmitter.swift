@@ -64,22 +64,47 @@ class YAMLEmitter {
     }
     
     private func emitYAMLValue(emitter: UnsafeMutablePointer<yaml_emitter_t>, event: UnsafeMutablePointer<yaml_event_t>, value: YAMLValue) {
-        
         switch value {
         case .Dictionary(let dictionary):
-            yaml_mapping_start_event_initialize(event, nil, nil, 1, YAML_BLOCK_MAPPING_STYLE)
-            yaml_emitter_emit(emitter, event)
-            for (key, value) in dictionary {
-                emitYAMLValue(emitter, event: event, value: key)
-                emitYAMLValue(emitter, event: event, value: value)
-            }
-            yaml_mapping_end_event_initialize(event)
-            yaml_emitter_emit(emitter, event)
+            emitMapping(emitter, event: event, mapping: dictionary)
+        case .Array(let array):
+            emitSequence(emitter, event: event, sequence: array)
         case .String(let string):
-            yaml_scalar_event_initialize(event, nil, nil, yaml_char_from_string(string), Int32(string.characters.count), 1, 1, YAML_PLAIN_SCALAR_STYLE)
-            yaml_emitter_emit(emitter, event)
-        default:
-            print("nothing to see here")
+            emitScalarValue(emitter, event: event, value: string)
+        case .Int(let int):
+            emitScalarValue(emitter, event: event, value: "\(int)")
+        case .Double(let double):
+            emitScalarValue(emitter, event: event, value: "\(double)")
+        case .Bool(let bool):
+            emitScalarValue(emitter, event: event, value: (bool == true ? "true" : "false"))
+        case .None:
+            emitScalarValue(emitter, event: event, value: "null")
         }
+    }
+    
+    private func emitScalarValue(emitter: UnsafeMutablePointer<yaml_emitter_t>, event: UnsafeMutablePointer<yaml_event_t>, value: String) {
+        yaml_scalar_event_initialize(event, nil, nil, yaml_char_from_string(value), Int32(value.characters.count), 1, 1, YAML_PLAIN_SCALAR_STYLE)
+        yaml_emitter_emit(emitter, event)
+    }
+    
+    private func emitMapping(emitter: UnsafeMutablePointer<yaml_emitter_t>, event: UnsafeMutablePointer<yaml_event_t>, mapping: [YAMLValue: YAMLValue]) {
+        yaml_mapping_start_event_initialize(event, nil, nil, 1, YAML_BLOCK_MAPPING_STYLE)
+        yaml_emitter_emit(emitter, event)
+        for (key, value) in mapping {
+            emitYAMLValue(emitter, event: event, value: key)
+            emitYAMLValue(emitter, event: event, value: value)
+        }
+        yaml_mapping_end_event_initialize(event)
+        yaml_emitter_emit(emitter, event)
+    }
+    
+    private func emitSequence(emitter: UnsafeMutablePointer<yaml_emitter_t>, event: UnsafeMutablePointer<yaml_event_t>, sequence: [YAMLValue]) {
+        yaml_sequence_start_event_initialize(event, nil, nil, 1, YAML_BLOCK_SEQUENCE_STYLE)
+        yaml_emitter_emit(emitter, event)
+        for value in sequence {
+            emitYAMLValue(emitter, event: event, value: value)
+        }
+        yaml_sequence_end_event_initialize(event)
+        yaml_emitter_emit(emitter, event)
     }
 }

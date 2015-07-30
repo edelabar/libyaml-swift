@@ -202,4 +202,9 @@ class YAMLParserTests: XCTestCase {
                          "foo: bar"
         XCTempAssertThrowsSpecificError(YAMLError.ParseError) { try YAML.load(YAMLString) }
     }
+    
+    func testEmptyString() {
+        let YAMLString = ""
+        XCTempAssertThrowsSpecificError(YAMLError.ParseError) { try YAML.load(YAMLString) }
+    }
 }
