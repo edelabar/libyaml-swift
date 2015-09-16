@@ -59,7 +59,6 @@ class YAMLEmitter {
         
         let outputData = outputStream.propertyForKey(NSStreamDataWrittenToMemoryStreamKey) as! NSData
         let outputString = NSString(data: outputData, encoding: NSUTF8StringEncoding)!
-        print(outputString)
         return outputString as String
     }
     
