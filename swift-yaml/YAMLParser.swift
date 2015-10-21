@@ -216,7 +216,7 @@ class YAMLParser {
 }
 
 private class YAMLTree {
-    let parent: YAMLTree?
+    weak var parent: YAMLTree?
     var children = [YAMLTree]()
     
     let key: YAMLValue?
