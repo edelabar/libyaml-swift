@@ -31,8 +31,9 @@ class YAMLParser {
     let allowMultiple: Bool
     
     deinit {
-        yaml_parser_delete(self.parser)
-        yaml_event_delete(self.event)
+        yaml_parser_delete(parser)
+        free(parser)
+        free(event)
     }
     
     init(allowMultiple: Bool = false) {
@@ -54,6 +55,7 @@ class YAMLParser {
                 throw YAMLError.ParseError
             }
             done = try handleEvent(self.event)
+            yaml_event_delete(self.event)
         }
         
         return self.rootNodes.map({ node in

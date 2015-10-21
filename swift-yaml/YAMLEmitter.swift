@@ -13,6 +13,7 @@ class YAMLEmitter {
     
     func emit(yaml: YAMLValue) throws -> String {
         let emitter = UnsafeMutablePointer<yaml_emitter_t>.alloc(sizeof(yaml_emitter_t))
+        defer { free(emitter) }
         guard yaml_emitter_initialize(emitter) == 1 else {
             print("unable to initialize emitter")
             throw YAMLError.UnknownError
@@ -36,7 +37,10 @@ class YAMLEmitter {
         yaml_emitter_set_output(emitter, writeHandler, &outputStream)
         
         let event = UnsafeMutablePointer<yaml_event_t>.alloc(sizeof(yaml_event_t))
-        defer { yaml_event_delete(event) }
+        defer {
+            yaml_event_delete(event)
+            free(event)
+        }
 
         // start stream
         yaml_stream_start_event_initialize(event, YAML_UTF8_ENCODING)
