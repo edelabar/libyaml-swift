@@ -47,7 +47,7 @@ class YAMLParser {
             throw YAMLError.UnknownError
         }
         
-        yaml_parser_set_input_string(self.parser, input, input.characters.count);
+        yaml_parser_set_input_string(self.parser, input, input.utf8.count);
         
         var done = false
         while (!done) {

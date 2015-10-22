@@ -86,7 +86,7 @@ class YAMLEmitter {
     }
     
     private func emitScalarValue(emitter: UnsafeMutablePointer<yaml_emitter_t>, event: UnsafeMutablePointer<yaml_event_t>, value: String) {
-        yaml_scalar_event_initialize(event, nil, nil, yaml_char_from_string(value), Int32(value.characters.count), 1, 1, YAML_PLAIN_SCALAR_STYLE)
+        yaml_scalar_event_initialize(event, nil, nil, yaml_char_from_string(value), Int32(value.utf8.count), 1, 1, YAML_PLAIN_SCALAR_STYLE)
         yaml_emitter_emit(emitter, event)
     }
     
