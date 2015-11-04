@@ -105,7 +105,22 @@ class YAMLEmitter {
         yaml_sequence_start_event_initialize(event, nil, nil, 1, YAML_BLOCK_SEQUENCE_STYLE)
         yaml_emitter_emit(emitter, event)
         for value in sequence {
-            emitYAMLValue(emitter, event: event, value: value)
+            switch value {
+            case .Dictionary(_):
+                break
+            case .Array(_):
+                break
+            case .String(let string):
+                emitScalarValue(emitter, event: event, value: string)
+            case .Int(let int):
+                emitScalarValue(emitter, event: event, value: "\(int)")
+            case .Double(let double):
+                emitScalarValue(emitter, event: event, value: "\(double)")
+            case .Bool(let bool):
+                emitScalarValue(emitter, event: event, value: (bool == true ? "true" : "false"))
+            case .None:
+                emitScalarValue(emitter, event: event, value: "null")
+            }
         }
         yaml_sequence_end_event_initialize(event)
         yaml_emitter_emit(emitter, event)
