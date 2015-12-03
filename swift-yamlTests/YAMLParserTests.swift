@@ -205,6 +205,7 @@ class YAMLParserTests: XCTestCase {
     
     func testEmptyString() {
         let YAMLString = ""
-        XCTempAssertThrowsSpecificError(YAMLError.ParseError) { try YAML.load(YAMLString) }
+        let value = try! YAML.load(YAMLString)
+        XCTAssertEqual(value, YAMLValue.None)
     }
 }

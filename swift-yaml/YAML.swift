@@ -22,7 +22,7 @@ public struct YAML {
             return first
         }
         else {
-            throw YAMLError.ParseError
+            return YAMLValue.None
         }
     }
     
