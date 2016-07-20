@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import LibYAML
 
 private enum YAMLScalarState {
     case WaitingForKey
@@ -75,7 +76,7 @@ class YAMLParser {
             self.currentKey = nil
             self.currentNode = nil
         case YAML_ALIAS_EVENT.rawValue:
-            let anchor = String.fromCString(yaml_cstring_char(yaml_event_alias_anchor(event)))
+            let anchor = String(validatingUTF8: yaml_cstring_char(yaml_event_alias_anchor(event)))
             if let anchor = anchor, let currentNode = self.currentNode, let anchorNode = self.currentRootNode?.treeWithAnchor(anchor) {
                 currentNode.value[self.currentKey!] = anchorNode.value
                 currentNode.children.append(anchorNode)
@@ -83,14 +84,14 @@ class YAMLParser {
             self.state = .WaitingForKey
         case YAML_MAPPING_START_EVENT.rawValue:
             let value: YAMLValue = [:]
-            let anchor = String.fromCString(yaml_cstring_char(yaml_event_mapping_start_anchor(event)))
+            let anchor = String(validatingUTF8: yaml_cstring_char(yaml_event_mapping_start_anchor(event)))
             self.pushNode(value, anchor: anchor)
             self.state = .WaitingForKey
         case YAML_MAPPING_END_EVENT.rawValue:
             self.popNode()
         case YAML_SEQUENCE_START_EVENT.rawValue:
             let value: YAMLValue = []
-            let anchor = String.fromCString(yaml_cstring_char(yaml_event_sequence_start_anchor(event)))
+            let anchor = String(validatingUTF8: yaml_cstring_char(yaml_event_sequence_start_anchor(event)))
             self.pushNode(value, anchor: anchor)
             self.state = .WaitingForValue
         case YAML_SEQUENCE_END_EVENT.rawValue:
@@ -164,12 +165,12 @@ class YAMLParser {
     
     private func valueForScalarEvent(_ event: UnsafeMutablePointer<yaml_event_t>) throws ->  (String, YAMLValue) {
         let value = yaml_event_scalar_value(event)
-        guard let stringValue = String.fromCString(yaml_cstring_char(value)) else {
+        guard let stringValue = String(validatingUTF8: yaml_cstring_char(value)) else {
             throw YAMLError.parseError
         }
         
         let tag = yaml_event_scalar_tag(event);
-        let tagString = String.fromCString(yaml_cstring_char(tag))
+        let tagString = String(validatingUTF8: yaml_cstring_char(tag))
         if let tagString = tagString {
             print("tag: \(tagString)")
             

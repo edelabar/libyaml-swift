@@ -6,8 +6,8 @@
 //  Copyright © 2015 Invisible Pixel. All rights reserved.
 //
 
-#import "yaml.h"
-#import "yaml_helpers.h"
+#import "include/yaml.h"
+#import "include/yaml_private.h"
 
 yaml_char_t* yaml_event_scalar_anchor(yaml_event_t *event) {
     return event->data.scalar.anchor;

@@ -1,5 +1,5 @@
 
-#include "yaml_private.h"
+#import "include/yaml_private.h"
 
 /*
  * Flush the buffer if needed.

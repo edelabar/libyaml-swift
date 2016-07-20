@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import LibYAML
 
 typealias EmitterType = UnsafeMutablePointer<yaml_emitter_t>
 typealias EventType = UnsafeMutablePointer<yaml_event_t>
@@ -31,11 +32,14 @@ class YAMLEmitter {
         outputStream.open()
         defer { outputStream.close() }
         
-        let writeHandler = {(data: UnsafeMutablePointer<Void>, buffer: UnsafeMutablePointer<UInt8>, size: Int) -> Int32 in
+        func writeHandler(data: UnsafeMutablePointer<Void>?, buffer: UnsafeMutablePointer<UInt8>?, size: Int) -> Int32 {
             let outputPointer = UnsafeMutablePointer<NSOutputStream>(data)
-            let outputStream: NSOutputStream = outputPointer.pointee
-            let success = outputStream.write(buffer, maxLength: size) > 0
-            return success ? 1 : 0
+            let stream: NSOutputStream? = outputPointer?.pointee
+            if let stream = stream {
+                let success = stream.write(buffer!, maxLength: size) > 0
+                return success ? 1 : 0
+            }
+            return 0
         }
         
         yaml_emitter_set_output(emitter, writeHandler, &outputStream)

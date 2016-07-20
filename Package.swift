@@ -2,7 +2,12 @@ import PackageDescription
 
 let package = Package(
     name: "YAML",
-    dependencies: [
-        .Package(url: "https://github.com/njdehoog/libyaml.git", majorVersion: 0, minor: 1)
+    targets: [
+        Target(
+            name: "YAML",
+            dependencies: ["LibYAML"]),
+        Target(
+            name: "LibYAML",
+            dependencies: [])
     ]
 )
