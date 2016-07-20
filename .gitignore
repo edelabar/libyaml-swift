@@ -142,3 +142,9 @@ Pods/
 # and should therefore not be checked into the VCS.
 
 *.xccheckout
+
+###
+# Swift package manager
+
+.build/
+Packages/
