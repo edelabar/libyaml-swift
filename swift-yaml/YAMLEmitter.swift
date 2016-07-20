@@ -14,12 +14,12 @@ typealias EventType = UnsafeMutablePointer<yaml_event_t>
 class YAMLEmitter {
     private static let bufferSize = 65536
     
-    func emit(yaml: YAMLValue) throws -> String {
-        let emitter = UnsafeMutablePointer<yaml_emitter_t>.alloc(sizeof(yaml_emitter_t))
+    func emit(_ yaml: YAMLValue) throws -> String {
+        let emitter = UnsafeMutablePointer<yaml_emitter_t>(allocatingCapacity:sizeof(yaml_emitter_t))
         defer { free(emitter) }
         guard yaml_emitter_initialize(emitter) == 1 else {
             print("unable to initialize emitter")
-            throw YAMLError.UnknownError
+            throw YAMLError.unknownError
         }        
         defer { yaml_emitter_delete(emitter) }
 
@@ -27,19 +27,20 @@ class YAMLEmitter {
         yaml_emitter_set_encoding(emitter, YAML_UTF8_ENCODING)
         yaml_emitter_set_indent(emitter, 2)
         
-        var outputStream = NSOutputStream.outputStreamToMemory()
+        var outputStream = NSOutputStream.toMemory()
         outputStream.open()
         defer { outputStream.close() }
-        func writeHandler(data: UnsafeMutablePointer<Void>, buffer: UnsafeMutablePointer<UInt8>, size: Int) -> Int32 {
+        
+        let writeHandler = {(data: UnsafeMutablePointer<Void>, buffer: UnsafeMutablePointer<UInt8>, size: Int) -> Int32 in
             let outputPointer = UnsafeMutablePointer<NSOutputStream>(data)
-            let outputStream: NSOutputStream = outputPointer.memory
+            let outputStream: NSOutputStream = outputPointer.pointee
             let success = outputStream.write(buffer, maxLength: size) > 0
             return success ? 1 : 0
         }
         
         yaml_emitter_set_output(emitter, writeHandler, &outputStream)
         
-        let event = UnsafeMutablePointer<yaml_event_t>.alloc(sizeof(yaml_event_t))
+        let event = UnsafeMutablePointer<yaml_event_t>(allocatingCapacity: sizeof(yaml_event_t))
         defer {
             yaml_event_delete(event)
             free(event)
@@ -64,12 +65,12 @@ class YAMLEmitter {
         yaml_stream_end_event_initialize(event)
         yaml_emitter_emit(emitter, event)
         
-        let outputData = outputStream.propertyForKey(NSStreamDataWrittenToMemoryStreamKey) as! NSData
-        let outputString = NSString(data: outputData, encoding: NSUTF8StringEncoding)!
+        let outputData = outputStream.property(forKey: Stream.PropertyKey.dataWrittenToMemoryStreamKey.rawValue) as! Data
+        let outputString = NSString(data: outputData, encoding: String.Encoding.utf8.rawValue)!
         return outputString as String
     }
     
-    private func emitYAMLValue(emitter: EmitterType, event: EventType, value: YAMLValue) {
+    private func emitYAMLValue(_ emitter: EmitterType, event: EventType, value: YAMLValue) {
         switch value {
         case .Array(let array):
             emitSequence(emitter, event: event, sequence: array)
@@ -89,12 +90,12 @@ class YAMLEmitter {
     
     }
     
-    private func emitScalarValue(emitter: EmitterType, event: EventType, value: String) {
+    private func emitScalarValue(_ emitter: EmitterType, event: EventType, value: String) {
         yaml_scalar_event_initialize(event, nil, nil, yaml_char_from_string(value), Int32(value.utf8.count), 1, 1, YAML_PLAIN_SCALAR_STYLE)
         yaml_emitter_emit(emitter, event)
     }
     
-    private func emitMapping(emitter: EmitterType, event: EventType, mapping: [YAMLValue: YAMLValue]) {
+    private func emitMapping(_ emitter: EmitterType, event: EventType, mapping: [YAMLValue: YAMLValue]) {
         yaml_mapping_start_event_initialize(event, nil, nil, 1, YAML_BLOCK_MAPPING_STYLE)
         yaml_emitter_emit(emitter, event)
         for (key, value) in mapping {
@@ -105,7 +106,7 @@ class YAMLEmitter {
         yaml_emitter_emit(emitter, event)
     }
     
-    private func emitSequence(emitter: EmitterType, event: EventType, sequence: [YAMLValue]) {
+    private func emitSequence(_ emitter: EmitterType, event: EventType, sequence: [YAMLValue]) {
         yaml_sequence_start_event_initialize(event, nil, nil, 1, YAML_BLOCK_SEQUENCE_STYLE)
         yaml_emitter_emit(emitter, event)
         for value in sequence as [YAMLValue] {

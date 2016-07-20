@@ -14,8 +14,8 @@ private enum YAMLScalarState {
 }
 
 class YAMLParser {
-    private let parser = UnsafeMutablePointer<yaml_parser_t>.alloc(sizeof(yaml_parser_t))
-    private let event = UnsafeMutablePointer<yaml_event_t>.alloc(sizeof(yaml_event_t))
+    private let parser = UnsafeMutablePointer<yaml_parser_t>(allocatingCapacity: sizeof(yaml_parser_t))
+    private let event = UnsafeMutablePointer<yaml_event_t>(allocatingCapacity: sizeof(yaml_event_t))
     
     private var state: YAMLScalarState = .WaitingForKey
     private var currentKey: YAMLValue?
@@ -41,10 +41,10 @@ class YAMLParser {
         self.rootNodes = []
     }
     
-    func parse(input: String) throws -> [YAMLValue] {
+    func parse(_ input: String) throws -> [YAMLValue] {
         let initialized = yaml_parser_initialize(self.parser)
         guard initialized == 1 else {
-            throw YAMLError.UnknownError
+            throw YAMLError.unknownError
         }
         
         yaml_parser_set_input_string(self.parser, input, input.utf8.count);
@@ -52,7 +52,7 @@ class YAMLParser {
         var done = false
         while (!done) {
             guard yaml_parser_parse(self.parser, self.event) == 1 else {
-                throw YAMLError.ParseError
+                throw YAMLError.parseError
             }
             done = try handleEvent(self.event)
             yaml_event_delete(self.event)
@@ -63,9 +63,9 @@ class YAMLParser {
         })
     }
     
-    private func handleEvent(event: UnsafeMutablePointer<yaml_event_t>) throws -> Bool {
+    private func handleEvent(_ event: UnsafeMutablePointer<yaml_event_t>) throws -> Bool {
         
-        switch event.memory.type.rawValue {
+        switch event.pointee.type.rawValue {
         case YAML_STREAM_START_EVENT.rawValue:
             self.state = .WaitingForValue
         case YAML_DOCUMENT_START_EVENT.rawValue:
@@ -121,15 +121,15 @@ class YAMLParser {
         case YAML_STREAM_END_EVENT.rawValue:
             return true
         default:
-            throw YAMLError.ParseError
+            throw YAMLError.parseError
         }
         
         return false
     }
     
-    private func pushNode(value: YAMLValue, anchor: String? = nil) {
+    private func pushNode(_ value: YAMLValue, anchor: String? = nil) {
         defer {
-            self.level++
+            self.level += 1
         }
         
         if self.level == 0 {
@@ -146,7 +146,7 @@ class YAMLParser {
     }
     
     private func popNode() {
-        self.level--
+        self.level -= 1
         
         if let parent = self.currentNode?.parent {
             if case .Array(var array) = parent.value {
@@ -162,10 +162,10 @@ class YAMLParser {
         self.currentNode = self.currentNode?.parent
     }
     
-    private func valueForScalarEvent(event: UnsafeMutablePointer<yaml_event_t>) throws ->  (String, YAMLValue) {
+    private func valueForScalarEvent(_ event: UnsafeMutablePointer<yaml_event_t>) throws ->  (String, YAMLValue) {
         let value = yaml_event_scalar_value(event)
         guard let stringValue = String.fromCString(yaml_cstring_char(value)) else {
-            throw YAMLError.ParseError
+            throw YAMLError.parseError
         }
         
         let tag = yaml_event_scalar_tag(event);
@@ -189,7 +189,7 @@ class YAMLParser {
         
         let style = yaml_event_scalar_style(event)
         if style == YAML_PLAIN_SCALAR_STYLE {
-            let scanner = NSScanner(string: stringValue)
+            let scanner = Scanner(string: stringValue)
             if scanner.scanInt(nil) && scanner.scanLocation == stringValue.characters.count {
                 let int = Int(stringValue)!
                 return (stringValue, YAMLValue.Int(int))
@@ -231,7 +231,7 @@ private class YAMLTree {
         self.anchor = anchor
     }
     
-    func treeWithAnchor(anchor: String) -> YAMLTree? {
+    func treeWithAnchor(_ anchor: String) -> YAMLTree? {
         if self.anchor == anchor {
             return self
         }

@@ -9,9 +9,9 @@
 import Foundation
 
 
-public enum YAMLError: ErrorType {
-    case UnknownError
-    case ParseError
+public enum YAMLError: ErrorProtocol {
+    case unknownError
+    case parseError
 }
 
 public struct YAML {
