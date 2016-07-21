@@ -16,7 +16,7 @@ class YAMLEmitter {
     private static let bufferSize = 65536
     
     func emit(_ yaml: YAMLValue) throws -> String {
-        let emitter = UnsafeMutablePointer<yaml_emitter_t>(allocatingCapacity:sizeof(yaml_emitter_t))
+        let emitter = UnsafeMutablePointer<yaml_emitter_t>(allocatingCapacity:sizeof(yaml_emitter_t.self))
         defer { free(emitter) }
         guard yaml_emitter_initialize(emitter) == 1 else {
             print("unable to initialize emitter")
@@ -44,7 +44,7 @@ class YAMLEmitter {
         
         yaml_emitter_set_output(emitter, writeHandler, &outputStream)
         
-        let event = UnsafeMutablePointer<yaml_event_t>(allocatingCapacity: sizeof(yaml_event_t))
+        let event = UnsafeMutablePointer<yaml_event_t>(allocatingCapacity: sizeof(yaml_event_t.self))
         defer {
             yaml_event_delete(event)
             free(event)
@@ -69,7 +69,7 @@ class YAMLEmitter {
         yaml_stream_end_event_initialize(event)
         yaml_emitter_emit(emitter, event)
         
-        let outputData = outputStream.property(forKey: Stream.PropertyKey.dataWrittenToMemoryStreamKey.rawValue) as! Data
+        let outputData = outputStream.property(forKey: Stream.PropertyKey.dataWrittenToMemoryStreamKey) as! Data
         let outputString = NSString(data: outputData, encoding: String.Encoding.utf8.rawValue)!
         return outputString as String
     }

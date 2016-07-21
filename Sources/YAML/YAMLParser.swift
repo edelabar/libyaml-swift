@@ -15,8 +15,8 @@ private enum YAMLScalarState {
 }
 
 class YAMLParser {
-    private let parser = UnsafeMutablePointer<yaml_parser_t>(allocatingCapacity: sizeof(yaml_parser_t))
-    private let event = UnsafeMutablePointer<yaml_event_t>(allocatingCapacity: sizeof(yaml_event_t))
+    private let parser = UnsafeMutablePointer<yaml_parser_t>(allocatingCapacity: sizeof(yaml_parser_t.self))
+    private let event = UnsafeMutablePointer<yaml_event_t>(allocatingCapacity: sizeof(yaml_event_t.self))
     
     private var state: YAMLScalarState = .WaitingForKey
     private var currentKey: YAMLValue?

@@ -25,7 +25,6 @@
 		FDDD25101D3FC6F800C00C39 /* scanner.c in Sources */ = {isa = PBXBuildFile; fileRef = FDDD24FB1D3FC6F800C00C39 /* scanner.c */; };
 		FDDD25111D3FC6F800C00C39 /* writer.c in Sources */ = {isa = PBXBuildFile; fileRef = FDDD24FC1D3FC6F800C00C39 /* writer.c */; };
 		FDDD25121D3FC6F800C00C39 /* yaml_helpers.c in Sources */ = {isa = PBXBuildFile; fileRef = FDDD24FD1D3FC6F800C00C39 /* yaml_helpers.c */; };
-		FDDD25131D3FC6F800C00C39 /* SwiftYAML.h in Headers */ = {isa = PBXBuildFile; fileRef = FDDD24FE1D3FC6F800C00C39 /* SwiftYAML.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		FDDD25141D3FC6F800C00C39 /* YAML.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDDD25001D3FC6F800C00C39 /* YAML.swift */; };
 		FDDD25151D3FC6F800C00C39 /* YAMLEmitter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDDD25011D3FC6F800C00C39 /* YAMLEmitter.swift */; };
 		FDDD25161D3FC6F800C00C39 /* YAMLParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDDD25021D3FC6F800C00C39 /* YAMLParser.swift */; };
@@ -64,7 +63,6 @@
 		FDDD24FB1D3FC6F800C00C39 /* scanner.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = scanner.c; sourceTree = "<group>"; };
 		FDDD24FC1D3FC6F800C00C39 /* writer.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = writer.c; sourceTree = "<group>"; };
 		FDDD24FD1D3FC6F800C00C39 /* yaml_helpers.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = yaml_helpers.c; sourceTree = "<group>"; };
-		FDDD24FE1D3FC6F800C00C39 /* SwiftYAML.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SwiftYAML.h; sourceTree = "<group>"; };
 		FDDD25001D3FC6F800C00C39 /* YAML.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YAML.swift; sourceTree = "<group>"; };
 		FDDD25011D3FC6F800C00C39 /* YAMLEmitter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YAMLEmitter.swift; sourceTree = "<group>"; };
 		FDDD25021D3FC6F800C00C39 /* YAMLParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YAMLParser.swift; sourceTree = "<group>"; };
@@ -127,7 +125,6 @@
 			children = (
 				FDDD24ED1D3FC6F800C00C39 /* Info.plist */,
 				FDDD24EE1D3FC6F800C00C39 /* LibYAML */,
-				FDDD24FE1D3FC6F800C00C39 /* SwiftYAML.h */,
 				FDDD24FF1D3FC6F800C00C39 /* YAML */,
 			);
 			path = Sources;
@@ -183,7 +180,6 @@
 				FDDD25081D3FC6F800C00C39 /* config.h in Headers */,
 				FDDD250B1D3FC6F800C00C39 /* yaml_private.h in Headers */,
 				FDDD25091D3FC6F800C00C39 /* yaml.h in Headers */,
-				FDDD25131D3FC6F800C00C39 /* SwiftYAML.h in Headers */,
 				FDDD250A1D3FC6F800C00C39 /* yaml_helpers.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
