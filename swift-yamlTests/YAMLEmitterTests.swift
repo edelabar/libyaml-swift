@@ -15,7 +15,7 @@ class YAMLEmitterTests: XCTestCase {
     /// @name Helpers
     ///-------------------------------------------------
     
-    func emitAndParse(value: YAMLValue) -> YAMLValue {
+    func emitAndParse(_ value: YAMLValue) -> YAMLValue {
         let output = try! YAML.emit(value)
         return try! YAML.load(output)
     }
