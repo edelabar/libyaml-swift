@@ -8,7 +8,7 @@
 
 import XCTest
 
-func XCTempAssertThrowsError(message: String = "", file: String = __FILE__, line: UInt = __LINE__, _ block: () throws -> ()) {
+func XCTempAssertThrowsError(_ message: String = "", file: StaticString = #file, line: UInt = #line, _ block: () throws -> ()) {
     do {
         try block()
         
@@ -18,7 +18,7 @@ func XCTempAssertThrowsError(message: String = "", file: String = __FILE__, line
     catch {}
 }
 
-func XCTempAssertThrowsSpecificError(kind: ErrorType, _ message: String = "", file: String = __FILE__, line: UInt = __LINE__, _ block: () throws -> ()) {
+func XCTempAssertThrowsSpecificError(_ kind: Error, _ message: String = "", file: StaticString = #file, line: UInt = #line, _ block: () throws -> ()) {
     do {
         try block()
         
@@ -34,7 +34,7 @@ func XCTempAssertThrowsSpecificError(kind: ErrorType, _ message: String = "", fi
     }
 }
 
-func XCTempAssertNoThrowError(message: String = "", file: String = __FILE__, line: UInt = __LINE__, _ block: () throws -> ()) {
+func XCTempAssertNoThrowError(_ message: String = "", file: StaticString = #file, line: UInt = #line, _ block: () throws -> ()) {
     do {try block()}
     catch {
         let msg = (message == "") ? "Tested block threw unexpected error." : message
@@ -43,7 +43,7 @@ func XCTempAssertNoThrowError(message: String = "", file: String = __FILE__, lin
 }
 
 
-func XCTempAssertNoThrowSpecificError(kind: ErrorType, _ message: String = "", file: String = __FILE__, line: UInt = __LINE__, _ block: () throws -> ()) {
+func XCTempAssertNoThrowSpecificError(_ kind: Error, _ message: String = "", file: StaticString = #file, line: UInt = #line, _ block: () throws -> ()) {
     do {try block()}
     catch let error as NSError {
         let unwanted = kind as NSError

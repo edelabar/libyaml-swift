@@ -9,31 +9,31 @@
 import Foundation
 
 public enum YAMLValue {
-    case None
-    case Bool(Swift.Bool)
-    case Int(Swift.Int)
-    case Double(Swift.Double)
-    case String(Swift.String)
-    case Array([YAMLValue])
-    case Dictionary([YAMLValue: YAMLValue])
+    case none
+    case bool(Swift.Bool)
+    case int(Swift.Int)
+    case double(Swift.Double)
+    case string(Swift.String)
+    case array([YAMLValue])
+    case dictionary([YAMLValue: YAMLValue])
 }
 
 extension YAMLValue: Hashable {
     public var hashValue: Swift.Int {
         switch self {
-        case .None:
+        case .none:
             return 0
-        case .String(let string):
+        case .string(let string):
             return string.hash
-        case .Bool(let bool):
-            return Swift.Int(bool)
-        case .Int(let int):
+        case .bool(let bool):
+            return bool ? 1 : 0
+        case .int(let int):
             return int
-        case .Double(let double):
+        case .double(let double):
             return Swift.Int(double)
-        case .Array(let array):
-            return array.reduce(0, combine: { $0 + $1.hashValue })
-        case .Dictionary(let dictionary):
+        case .array(let array):
+            return array.reduce(0, { $0 + $1.hashValue })
+        case .dictionary(let dictionary):
             return dictionary.keys.reduce(0) { $0 + $1.hashValue }
         }
     }
@@ -43,80 +43,80 @@ extension YAMLValue: Equatable {}
 public func == (lhs: YAMLValue, rhs: YAMLValue) -> Bool {
     var equal = false
     switch lhs {
-    case .None:
-        if case .None = rhs { equal = true }
-    case .String(let lv):
-        if case .String(let rv) = rhs { equal = (lv == rv) }
-    case .Bool(let lv):
-        if case .Bool(let rv) = rhs { equal = (lv == rv) }
-    case .Int(let lv):
-        if case .Int(let rv) = rhs { equal = (lv == rv) }
-    case .Double(let lv):
-        if case .Double(let rv) = rhs { equal = (lv == rv) }
-    case .Array(let lv):
-        if case .Array(let rv) = rhs { equal = (lv == rv) }
-    case .Dictionary(let lv):
-        if case .Dictionary(let rv) = rhs { equal = (lv == rv) }
+    case .none:
+        if case .none = rhs { equal = true }
+    case .string(let lv):
+        if case .string(let rv) = rhs { equal = (lv == rv) }
+    case .bool(let lv):
+        if case .bool(let rv) = rhs { equal = (lv == rv) }
+    case .int(let lv):
+        if case .int(let rv) = rhs { equal = (lv == rv) }
+    case .double(let lv):
+        if case .double(let rv) = rhs { equal = (lv == rv) }
+    case .array(let lv):
+        if case .array(let rv) = rhs { equal = (lv == rv) }
+    case .dictionary(let lv):
+        if case .dictionary(let rv) = rhs { equal = (lv == rv) }
     }
     return equal
 }
 
-extension YAMLValue: NilLiteralConvertible {
+extension YAMLValue: ExpressibleByNilLiteral {
     public init(nilLiteral: ()) {
-        self = .None
+        self = .none
     }
 }
 
-extension YAMLValue: BooleanLiteralConvertible {
+extension YAMLValue: ExpressibleByBooleanLiteral {
     public init(booleanLiteral: BooleanLiteralType) {
-        self = .Bool(booleanLiteral)
+        self = .bool(booleanLiteral)
     }
 }
 
-extension YAMLValue: IntegerLiteralConvertible {
+extension YAMLValue: ExpressibleByIntegerLiteral {
     public init(integerLiteral: IntegerLiteralType) {
-        self = .Int(integerLiteral)
+        self = .int(integerLiteral)
     }
 }
 
-extension YAMLValue: FloatLiteralConvertible {
+extension YAMLValue: ExpressibleByFloatLiteral {
     public init(floatLiteral: FloatLiteralType) {
-        self = .Double(floatLiteral)
+        self = .double(floatLiteral)
     }
 }
 
-extension YAMLValue: StringLiteralConvertible {
+extension YAMLValue: ExpressibleByStringLiteral {
     public init(stringLiteral: StringLiteralType) {
-        self = .String(stringLiteral)
+        self = .string(stringLiteral)
     }
     
     public init(extendedGraphemeClusterLiteral: StringLiteralType) {
-        self = .String(extendedGraphemeClusterLiteral)
+        self = .string(extendedGraphemeClusterLiteral)
     }
     
     public init(unicodeScalarLiteral: StringLiteralType) {
-        self = .String(unicodeScalarLiteral)
+        self = .string(unicodeScalarLiteral)
     }
 }
 
-extension YAMLValue: ArrayLiteralConvertible {
+extension YAMLValue: ExpressibleByArrayLiteral {
     public init(arrayLiteral elements: YAMLValue...) {
         var array = [YAMLValue]()
         array.reserveCapacity(elements.count)
         for element in elements {
             array.append(element)
         }
-        self = .Array(array)
+        self = .array(array)
     }
 }
 
-extension YAMLValue: DictionaryLiteralConvertible {
+extension YAMLValue: ExpressibleByDictionaryLiteral {
     public init(dictionaryLiteral elements: (YAMLValue, YAMLValue)...) {
         var dictionary = Swift.Dictionary<YAMLValue, YAMLValue>()
         for (k, v) in elements {
             dictionary[k] = v
         }
-        self = .Dictionary(dictionary)
+        self = .dictionary(dictionary)
     }
 }
 
@@ -124,17 +124,17 @@ extension YAMLValue {
     subscript(key: Swift.String) -> YAMLValue? {
         get {
             switch self {
-            case .Dictionary(let dictionary):
-                return dictionary[YAMLValue.String(key)]
+            case .dictionary(let dictionary):
+                return dictionary[YAMLValue.string(key)]
             default:
                 return nil
             }
         }
         set {
             switch self {
-            case .Dictionary(var dictionary):
-                dictionary[YAMLValue.String(key)] = newValue
-                self = .Dictionary(dictionary)
+            case .dictionary(var dictionary):
+                dictionary[YAMLValue.string(key)] = newValue
+                self = .dictionary(dictionary)
             default:
                 assert(false, "Can't use subscript on type which is not a dictionary")
             }
@@ -144,7 +144,7 @@ extension YAMLValue {
     subscript(key: YAMLValue) -> YAMLValue? {
         get {
             switch self {
-            case .Dictionary(let dictionary):
+            case .dictionary(let dictionary):
                 return dictionary[key]
             default:
                 return nil
@@ -152,9 +152,9 @@ extension YAMLValue {
         }
         set {
             switch self {
-            case .Dictionary(var dictionary):
+            case .dictionary(var dictionary):
                 dictionary[key] = newValue
-                self = .Dictionary(dictionary)
+                self = .dictionary(dictionary)
             default:
                 assert(false, "Can't use subscript on type which is not a dictionary")
             }
@@ -165,19 +165,19 @@ extension YAMLValue {
 extension YAMLValue: CustomDebugStringConvertible {
     public var debugDescription: Swift.String {
         switch self {
-        case .None:
+        case .none:
             return "None"
-        case .Bool(let b):
+        case .bool(let b):
             return "Bool(\(b))"
-        case .Int(let i):
+        case .int(let i):
             return "Int(\(i))"
-        case .Double(let f):
+        case .double(let f):
             return "Double(\(f))"
-        case .String(let s):
+        case .string(let s):
             return "String(\(s))"
-        case .Array(let s):
+        case .array(let s):
             return "Array(\(s))"
-        case .Dictionary(let m):
+        case .dictionary(let m):
             return "Dictionary(\(m))"
         }
     }

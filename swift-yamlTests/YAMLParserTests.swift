@@ -105,7 +105,7 @@ class YAMLParserTests: XCTestCase {
         let YAMLString = "!!null key: value"
         let value = try! YAML.load(YAMLString)
         // we expect an empty dictionary, because 'null' keys are skipped over
-        let expected: YAMLValue = [YAMLValue.None: "value"]
+        let expected: YAMLValue = [YAMLValue.none: "value"]
         XCTAssertEqual(value, expected)
     }
     
@@ -200,12 +200,12 @@ class YAMLParserTests: XCTestCase {
     func testIllegalMapping() {
         let YAMLString = "foo\n" +
                          "foo: bar"
-        XCTempAssertThrowsSpecificError(YAMLError.ParseError) { try YAML.load(YAMLString) }
+        XCTempAssertThrowsSpecificError(YAMLError.parseError) { try YAML.load(YAMLString) }
     }
     
     func testEmptyString() {
         let YAMLString = ""
         let value = try! YAML.load(YAMLString)
-        XCTAssertEqual(value, YAMLValue.None)
+        XCTAssertEqual(value, YAMLValue.none)
     }
 }

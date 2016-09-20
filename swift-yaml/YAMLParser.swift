@@ -9,23 +9,23 @@
 import Foundation
 
 private enum YAMLScalarState {
-    case WaitingForKey
-    case WaitingForValue
+    case waitingForKey
+    case waitingForValue
 }
 
 class YAMLParser {
-    private let parser = UnsafeMutablePointer<yaml_parser_t>.alloc(sizeof(yaml_parser_t))
-    private let event = UnsafeMutablePointer<yaml_event_t>.alloc(sizeof(yaml_event_t))
+    fileprivate let parser = UnsafeMutablePointer<yaml_parser_t>.allocate(capacity: MemoryLayout<yaml_parser_t>.size)
+    fileprivate let event = UnsafeMutablePointer<yaml_event_t>.allocate(capacity: MemoryLayout<yaml_event_t>.size)
     
-    private var state: YAMLScalarState = .WaitingForKey
-    private var currentKey: YAMLValue?
-    private var level: Int = 0
+    fileprivate var state: YAMLScalarState = .waitingForKey
+    fileprivate var currentKey: YAMLValue?
+    fileprivate var level: Int = 0
     
-    private var rootNodes: [YAMLTree]
-    private var currentRootNode: YAMLTree? {
+    fileprivate var rootNodes: [YAMLTree]
+    fileprivate var currentRootNode: YAMLTree? {
         return rootNodes.last
     }
-    private var currentNode: YAMLTree?
+    fileprivate var currentNode: YAMLTree?
     
     // whether parser should allow multiple documents in string
     let allowMultiple: Bool
@@ -41,10 +41,10 @@ class YAMLParser {
         self.rootNodes = []
     }
     
-    func parse(input: String) throws -> [YAMLValue] {
+    func parse(_ input: String) throws -> [YAMLValue] {
         let initialized = yaml_parser_initialize(self.parser)
         guard initialized == 1 else {
-            throw YAMLError.UnknownError
+            throw YAMLError.unknownError
         }
         
         yaml_parser_set_input_string(self.parser, input, input.utf8.count);
@@ -52,7 +52,7 @@ class YAMLParser {
         var done = false
         while (!done) {
             guard yaml_parser_parse(self.parser, self.event) == 1 else {
-                throw YAMLError.ParseError
+                throw YAMLError.parseError
             }
             done = try handleEvent(self.event)
             yaml_event_delete(self.event)
@@ -63,54 +63,60 @@ class YAMLParser {
         })
     }
     
-    private func handleEvent(event: UnsafeMutablePointer<yaml_event_t>) throws -> Bool {
+    fileprivate func handleEvent(_ event: UnsafeMutablePointer<yaml_event_t>) throws -> Bool {
         
-        switch event.memory.type.rawValue {
+        switch event.pointee.type.rawValue {
         case YAML_STREAM_START_EVENT.rawValue:
-            self.state = .WaitingForValue
+            self.state = .waitingForValue
         case YAML_DOCUMENT_START_EVENT.rawValue:
-            self.state = .WaitingForValue
+            self.state = .waitingForValue
         case YAML_DOCUMENT_END_EVENT.rawValue:
             self.level = 0
             self.currentKey = nil
             self.currentNode = nil
         case YAML_ALIAS_EVENT.rawValue:
-            let anchor = String.fromCString(yaml_cstring_char(yaml_event_alias_anchor(event)))
-            if let anchor = anchor, let currentNode = self.currentNode, let anchorNode = self.currentRootNode?.treeWithAnchor(anchor) {
-                currentNode.value[self.currentKey!] = anchorNode.value
-                currentNode.children.append(anchorNode)
+            if let cString = yaml_cstring_char(yaml_event_alias_anchor(event)) {
+                let anchor = String(cString: cString)
+                if let currentNode = currentNode, let anchorNode = currentRootNode?.treeWithAnchor(anchor) {
+                    currentNode.value[self.currentKey!] = anchorNode.value
+                    currentNode.children.append(anchorNode)
+                }
             }
-            self.state = .WaitingForKey
+            self.state = .waitingForKey
         case YAML_MAPPING_START_EVENT.rawValue:
             let value: YAMLValue = [:]
-            let anchor = String.fromCString(yaml_cstring_char(yaml_event_mapping_start_anchor(event)))
-            self.pushNode(value, anchor: anchor)
-            self.state = .WaitingForKey
+            if let cString = yaml_cstring_char(yaml_event_mapping_start_anchor(event)) {
+                let anchor = String(cString: cString)
+                self.pushNode(value, anchor: anchor)
+            }
+            self.state = .waitingForKey
         case YAML_MAPPING_END_EVENT.rawValue:
             self.popNode()
         case YAML_SEQUENCE_START_EVENT.rawValue:
             let value: YAMLValue = []
-            let anchor = String.fromCString(yaml_cstring_char(yaml_event_sequence_start_anchor(event)))
-            self.pushNode(value, anchor: anchor)
-            self.state = .WaitingForValue
+            if let cString = yaml_cstring_char(yaml_event_sequence_start_anchor(event)) {
+                let anchor = String(cString: cString)
+                self.pushNode(value, anchor: anchor)
+            }
+            self.state = .waitingForValue
         case YAML_SEQUENCE_END_EVENT.rawValue:
             self.popNode()
         case YAML_SCALAR_EVENT.rawValue:
             let (_, value) = try valueForScalarEvent(event)
-            if case .WaitingForKey = state {
+            if case .waitingForKey = state {
                 self.currentKey = value
-                self.state = .WaitingForValue
+                self.state = .waitingForValue
             }
             else {
                 if let node = self.currentNode {
-                    if case .Dictionary(_) = node.value {
+                    if case .dictionary(_) = node.value {
                         node.value[self.currentKey!] = value
-                        self.state = .WaitingForKey
+                        self.state = .waitingForKey
                     }
-                    else if case .Array(var array) = node.value {
+                    else if case .array(var array) = node.value {
                         array.append(value)
-                        node.value = YAMLValue.Array(array)
-                        self.state = .WaitingForValue
+                        node.value = YAMLValue.array(array)
+                        self.state = .waitingForValue
                     }
                 }
                 else {
@@ -121,15 +127,15 @@ class YAMLParser {
         case YAML_STREAM_END_EVENT.rawValue:
             return true
         default:
-            throw YAMLError.ParseError
+            throw YAMLError.parseError
         }
         
         return false
     }
     
-    private func pushNode(value: YAMLValue, anchor: String? = nil) {
+    fileprivate func pushNode(_ value: YAMLValue, anchor: String? = nil) {
         defer {
-            self.level++
+            self.level += 1
         }
         
         if self.level == 0 {
@@ -145,39 +151,39 @@ class YAMLParser {
         
     }
     
-    private func popNode() {
-        self.level--
+    fileprivate func popNode() {
+        self.level -= 1
         
         if let parent = self.currentNode?.parent {
-            if case .Array(var array) = parent.value {
+            if case .array(var array) = parent.value {
                 array.append(self.currentNode!.value)
-                parent.value = YAMLValue.Array(array)
+                parent.value = YAMLValue.array(array)
             }
-            else if case .Dictionary(var dict) = parent.value {
+            else if case .dictionary(var dict) = parent.value {
                 dict[self.currentNode!.key!] = self.currentNode!.value
-                parent.value = YAMLValue.Dictionary(dict)
+                parent.value = YAMLValue.dictionary(dict)
             }
         }
         
         self.currentNode = self.currentNode?.parent
     }
     
-    private func valueForScalarEvent(event: UnsafeMutablePointer<yaml_event_t>) throws ->  (String, YAMLValue) {
+    fileprivate func valueForScalarEvent(_ event: UnsafeMutablePointer<yaml_event_t>) throws ->  (String, YAMLValue) {
         let value = yaml_event_scalar_value(event)
-        guard let stringValue = String.fromCString(yaml_cstring_char(value)) else {
-            throw YAMLError.ParseError
+        guard let stringValue = String(validatingUTF8: yaml_cstring_char(value)) else {
+            throw YAMLError.parseError
         }
         
         let tag = yaml_event_scalar_tag(event);
-        let tagString = String.fromCString(yaml_cstring_char(tag))
-        if let tagString = tagString {
+        if let cString = yaml_cstring_char(tag) {
+            let tagString = String(cString: cString)
             print("tag: \(tagString)")
             
             if tagString == YAML_NULL_TAG {
-                return (stringValue, YAMLValue.None)
+                return (stringValue, YAMLValue.none)
             }
             else if tagString == YAML_STR_TAG {
-                return (stringValue, YAMLValue.String(stringValue))
+                return (stringValue, YAMLValue.string(stringValue))
             }
             else if tagString == YAML_TIMESTAMP_TAG {
                 // TODO: handle timestamp tag
@@ -189,29 +195,29 @@ class YAMLParser {
         
         let style = yaml_event_scalar_style(event)
         if style == YAML_PLAIN_SCALAR_STYLE {
-            let scanner = NSScanner(string: stringValue)
-            if scanner.scanInt(nil) && scanner.scanLocation == stringValue.characters.count {
+            let scanner = Scanner(string: stringValue)
+            if scanner.scanInt32(nil) && scanner.scanLocation == stringValue.characters.count {
                 let int = Int(stringValue)!
-                return (stringValue, YAMLValue.Int(int))
+                return (stringValue, YAMLValue.int(int))
             }
             else if scanner.scanDouble(nil) && scanner.scanLocation == stringValue.characters.count {
                 let double = Double(stringValue)!
-                return (stringValue, YAMLValue.Double(double))
+                return (stringValue, YAMLValue.double(double))
             }
             else if ["true", "True", "TRUE"].contains(stringValue) {
-                return (stringValue, YAMLValue.Bool(true))
+                return (stringValue, YAMLValue.bool(true))
             }
             else if ["false", "False", "FALSE"].contains(stringValue) {
-                return (stringValue, YAMLValue.Bool(false))
+                return (stringValue, YAMLValue.bool(false))
             }
             else if ["", "null", "~"].contains(stringValue) {
-                return (stringValue, YAMLValue.None)
+                return (stringValue, YAMLValue.none)
             }
             
             // TODO: add support for HEX values
         }
         
-        return (stringValue, YAMLValue.String(stringValue))
+        return (stringValue, YAMLValue.string(stringValue))
     }
 }
 
@@ -231,7 +237,7 @@ private class YAMLTree {
         self.anchor = anchor
     }
     
-    func treeWithAnchor(anchor: String) -> YAMLTree? {
+    func treeWithAnchor(_ anchor: String) -> YAMLTree? {
         if self.anchor == anchor {
             return self
         }
