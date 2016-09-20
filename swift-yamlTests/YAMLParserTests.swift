@@ -200,7 +200,7 @@ class YAMLParserTests: XCTestCase {
     func testIllegalMapping() {
         let YAMLString = "foo\n" +
                          "foo: bar"
-        XCTempAssertThrowsSpecificError(YAMLError.parseError) { try YAML.load(YAMLString) }
+        XCTempAssertThrowsSpecificError(YAMLError.parseError) { let _ = try YAML.load(YAMLString) }
     }
     
     func testEmptyString() {
