@@ -85,19 +85,21 @@ class YAMLParser {
             self.state = .waitingForKey
         case YAML_MAPPING_START_EVENT.rawValue:
             let value: YAMLValue = [:]
+            var anchor: String? = nil
             if let cString = yaml_cstring_char(yaml_event_mapping_start_anchor(event)) {
-                let anchor = String(cString: cString)
-                self.pushNode(value, anchor: anchor)
+                anchor = String(validatingUTF8: cString)
             }
+            self.pushNode(value, anchor: anchor)
             self.state = .waitingForKey
         case YAML_MAPPING_END_EVENT.rawValue:
             self.popNode()
         case YAML_SEQUENCE_START_EVENT.rawValue:
             let value: YAMLValue = []
+            var anchor: String? = nil
             if let cString = yaml_cstring_char(yaml_event_sequence_start_anchor(event)) {
-                let anchor = String(cString: cString)
-                self.pushNode(value, anchor: anchor)
+                anchor = String(cString: cString)
             }
+            self.pushNode(value, anchor: anchor)
             self.state = .waitingForValue
         case YAML_SEQUENCE_END_EVENT.rawValue:
             self.popNode()
