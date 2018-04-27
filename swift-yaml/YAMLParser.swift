@@ -198,11 +198,11 @@ class YAMLParser {
         let style = yaml_event_scalar_style(event)
         if style == YAML_PLAIN_SCALAR_STYLE {
             let scanner = Scanner(string: stringValue)
-            if scanner.scanInt32(nil) && scanner.scanLocation == stringValue.characters.count {
+            if scanner.scanInt32(nil) && scanner.scanLocation == stringValue.count {
                 let int = Int(stringValue)!
                 return (stringValue, YAMLValue.int(int))
             }
-            else if scanner.scanDouble(nil) && scanner.scanLocation == stringValue.characters.count {
+            else if scanner.scanDouble(nil) && scanner.scanLocation == stringValue.count {
                 let double = Double(stringValue)!
                 return (stringValue, YAMLValue.double(double))
             }
